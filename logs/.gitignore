@@ -1,0 +1,5 @@
+# We want to ignore all files in the logs directory apart from
+# this .gitignore file which is required to create the directory
+# when we create the working copy.
+*
+!.gitignore

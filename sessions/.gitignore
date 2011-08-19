@@ -1,0 +1,4 @@
+# Ignore the yaml session files but make sure we keep this
+# .gitignore file
+*.yml
+!.gitignore
