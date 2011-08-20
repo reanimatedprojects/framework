@@ -1,0 +1,48 @@
+Installing the RPGWNN framework and prerequisites
+=================================================
+
+Pre-requisites
+==============
+
+RPGWNN requires a few Perl modules to be installed in addition to
+the core modules that come with any modern Perl installation.
+
+We've tried to keep it to a minimum by using the Dancer micro 
+web application framework which itself has very few requirements.
+
+PSGI is an interface between Perl web applications and web servers,
+and Plack is a Perl module and toolkit that contains PSGI middleware,
+helpers and adapters to web servers.
+
+Information about Dancer can be found at http://perldancer.org/
+
+Information about Plack can be found at http://plackperl.org/
+
+
+Automatic installation of prerequisites
+---------------------------------------
+
+The "quick" method is to install the RPGWNN Bundle found in this
+distribution. The only downside is that it may unneccessarily 
+upgrade modules that you may already have installed on your system.
+
+  cd lib && perl -MCPAN -e 'install Bundle::RPGWNN'
+
+Manual installation
+-------------------
+
+If you don't want to do the automated method, you can install the key
+modules manually. Specifically, these modules are
+
+    Dancer
+    Plack
+    Template   (Template Toolkit)
+    YAML::Any  (replacement for YAML)
+
+Installation of these modules and their dependencies can be done
+(assuming you have CPAN installed) using the following command.
+
+  perl -MCPAN -e 'install Plack; install Dancer;
+    install Template; install YAML::Any;'
+
+
