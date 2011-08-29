@@ -24,6 +24,10 @@ Template 2.22
 
 YAML::Any 0.72
 
+DBIx::Class 0.08195
+
+Dancer::Plugin::DBIC
+
 =head1 AUTHOR
 
 Simon Amor E<lt>simon@rpgwnn.comE<gt>

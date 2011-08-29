@@ -37,3 +37,14 @@ engines:
     start_tag: '[%'
     end_tag:   '%]'
 
+plugins:
+  DBIC:
+    rpg:
+      schema_class: RPG::DB
+      dsn: dbi:mysql:rpg_db
+      user: rpg_user
+      pass: rpg_pass
+      options:
+        RaiseError: 1
+        PrintError: 1
+
