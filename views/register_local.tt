@@ -1,0 +1,14 @@
+<div style='width:300px;margin:30px auto 0px auto'>
+
+<form method="post" action="/register/local">
+<fieldset>
+<legend>Enter your details</legend>
+<label for="username">Username</label> <input id="username" name="username" type="text" /><br />
+<label for="password">Password</label> <input id="password" name="password" type="password" /><br />
+<label for="email">Email</label> <input id="email" name="email" type="text" /><br />
+
+<input style='float:right' type="submit" value="Continue" />
+</fieldset>
+</form>
+
+</div>

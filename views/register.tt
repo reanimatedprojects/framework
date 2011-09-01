@@ -1,0 +1,14 @@
+<div style='width:300px;margin:30px auto 0px auto'>
+
+<form method="post" action="/register">
+<fieldset>
+<legend>Sign up using</legend>
+<ul style='list-style-type:none'>
+<li><input id="at_local" name="auth_type" type="radio" value="local" checked="checked" /><label for="at_local">Local account</label></li>
+[%# <li><input id="at_openid" name="auth_type" type="radio" value="openid" /><label for="at_openid">OpenID</label></li> %]
+</ul>
+<input style='float:right' type="submit" value="Continue" />
+</fieldset>
+</form>
+
+</div>
