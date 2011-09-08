@@ -48,3 +48,13 @@ plugins:
         RaiseError: 1
         PrintError: 1
 
+# RPGWNN specific configuration
+rpgwnn:
+# Authentication methods for accounts
+    auths:
+# Local accounts (username/password)
+# This would normally be enabled for everyone
+      local:
+        name: "Local account"
+        module: "RPG::Auth::Local"
+
