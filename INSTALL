@@ -45,4 +45,33 @@ Installation of these modules and their dependencies can be done
   perl -MCPAN -e 'install Plack; install Dancer;
     install Template; install YAML::Any;'
 
+------------------------------------------------------------------------------
+
+Database
+========
+
+As a MySQL administrator account, you need to create a database and grant
+permissions to the user.
+
+By default, we use the database name "rpg_db", with a username of
+"rpg_user" and password of "rpg_pass"
+If you wish to change these defaults (and you should probably change
+at least the password) simply replace them in the instructions below.
+
+ CREATE DATABASE rpg_db;
+ GRANT ALL ON rpg_db.* TO 'rpg_user'@'localhost'
+    IDENTIFIED BY 'rpg_pass';
+
+If all is well, you should be able to run the following command at
+a shell prompt and connect to the database.
+
+ mysql -urpg_user -prpg_pass rpg_db
+
+Next, import the database schema (schema.sql) to create the table
+structure.
+
+ mysql -urpg_user -prpg_pass rpg_db < schema.sql
+
+If you change the database details, also ensure that config.yml is
+updated with the new information.
 
