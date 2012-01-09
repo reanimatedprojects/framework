@@ -41,15 +41,10 @@ post '/register' => sub {
     template "register" => { auths => config->{ rpgwnn }{ auths } };
 };
 
-get '/register/local' => sub {
-    # Local account creation only.
-    template "register_local";
-};
+# These are includes for the different pages that aren't directly
+# included in this file.
 
-post '/register/local' => sub {
-    # Local account creation only.
-    template "register_local";
-};
+load "page/register_local.pl";
 
 # Define any hooks here
 
