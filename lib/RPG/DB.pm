@@ -1,7 +1,5 @@
 package RPG::DB;
 
-use base qw/DBIx::Class::Schema/;
-
 =head1 NAME
 
 RPG::DB - Database Schema module
@@ -20,6 +18,8 @@ provides the base schema
  my $account = $schema->resultset("Accounts")->find(1);
 
 =cut
+
+use base qw/DBIx::Class::Schema/;
 
 __PACKAGE__->load_namespaces();
 

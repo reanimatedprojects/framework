@@ -1,6 +1,7 @@
 package RPG;
 use Dancer ':syntax';
 use POSIX;
+use Dancer::Plugin::DBIC qw(schema);
 
 our $VERSION = '0.1';
 
