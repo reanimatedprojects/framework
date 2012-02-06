@@ -1,0 +1,20 @@
+To setup translations, you need to create file in the
+following directory named com.rpgwnn.mo
+
+lib/LocaleData/$LANG/LC_MESSAGES/
+
+where $LANG is the locale code such as en, en_GB, or en_GB.UTF-8
+The locale code can be as generic or specific as you like.
+
+For example, lib/LocaleData/en_GB.UTF-8/LC_MESSAGES/com.rpgwnn.mo
+
+You may also wish to create the corresponding .po file in the same
+location to assist in managing the translations. The .po file is 
+"plain" text whereas the .mo is the binary form.
+
+You can use Poedit to edit the files - http://www.poedit.net/
+
+Alternatively, the Linux commands msgfmt and msgunfmt can be used
+to convert .po to .mo and vice versa. These are included with 
+installations of gettext usually (but not on OSX 10.7!)
+
