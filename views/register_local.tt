@@ -1,4 +1,11 @@
 <div style='width:300px;margin:30px auto 0px auto'>
+[% IF result %]
+
+<div class="infobox [% result.status %]">[% result.message OR result.error %]</div>
+
+[% USE Dumper; Dumper.dump(result) %]
+
+[% ELSE %]
 
 <form method="post" action="/register/local">
 <fieldset>
@@ -11,4 +18,5 @@
 </fieldset>
 </form>
 
+[% END %]
 </div>

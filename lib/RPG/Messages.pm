@@ -1,18 +1,24 @@
 package RPG::Messages;
 
+use Locale::Messages; # qw(:libintl_h); adding this causes warnings
+use Locale::TextDomain ("com.rpgwnn");
+
 =head1 NAME
 
 RPG::Messages - a generic message module
 
 =head1 DESCRIPTION
 
-This module converts standard message codes into English strings. If you
-wish to translate the messages, create a .mo file within lib/LocaleData
+This module converts strings into alternative languages (if translation
+files are available). To translate the messages, create a .mo file within
+lib/LocaleData
 
 The exact path will vary depending on the locale that you're translating
 for. To change the English translation, you would use en, en_GB or 
 en_GB.UTF-8 as the locale code.
 For example, lib/LocaleData/en_GB.UTF-8/LC_MESSAGES/com.rpgwnn.mo
+
+=head1 SYNOPSIS
 
     # Locale message translation
     use Locale::Messages qw(LC_MESSAGES);
@@ -23,26 +29,12 @@ For example, lib/LocaleData/en_GB.UTF-8/LC_MESSAGES/com.rpgwnn.mo
 
 =head1 METHODS
 
-=cut
-
-# Default messages - can't access them from outside this module, but can
-# reference RPG::Messages->{ code2msg }
-
-my %code2msg = (
-
-    ACCOUNT_NX     => "Account does not exist",
-    ACCOUNT_OK     => "Account registered successfully",
-
-    CHARACTER_NX   => "Character does not exist",
-
-    FORM_FIELDS    => "You need to fill all required fields",
-
-    UNKNOWN        => "Unknown error occurred",
-);
-
 =head2 $obj = $class->new( )
 
-Initialises the object and copies the code2msg hash into the object.
+Initialises the object. Not really required as you can just call it
+like this.
+
+ RPG::Messages->message("...");
 
 =cut
 
@@ -50,31 +42,22 @@ sub new {
     my $class = shift;
     my $self = { };
 
-    # Stick (a copy of) the code2msg hash in the object
-    $self->{ messages } = { %code2msg };
-
     bless $self, $class;
 }
 
 =head2 $str = $obj->message( $code_str )
 
-This method takes a standard message code as defined in the code2msg hash
-in this module, and converts it to human readable text.
+This method takes a message and converts it to another language if
+the translation file is provided.
 
 =cut
 
 sub message {
     my $self = shift;
-    my $code = shift;
+    my $msg = shift;
 
-    return __"Unknown code" unless $code;
-
-    if ($self->{ messages }{ $code }) {
-        return __$self->{ messages }{ $code };
-    }
-
-    return __"Unknown code";
+    return __"Unknown error" unless $msg;
+    return __$msg;
 }
 
 1;
-
