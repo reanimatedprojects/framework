@@ -1,4 +1,5 @@
-package RPG;
+package RPG::App;
+
 use Dancer ':syntax';
 use POSIX;
 use Dancer::Plugin::DBIC qw(schema);
