@@ -77,6 +77,48 @@ sub args {
     return shift @_;
 }
 
+=head2 CLASS->ok_response( %params )
+
+Takes any parameters that need to be returned and
+generates a hashref with status => "ok" and the other
+parameters.
+
+=cut
+
+sub ok_response {
+    my $self = shift;
+    my $args = $self->args(@_);
+
+    # If status is passed, delete it since we're replacing
+    # it in the final hashref.
+    delete $args->{ status } if exists $args->{ status };
+
+    return {
+        status => "ok",
+        %$args,
+    };
+}
+
+=head2 CLASS->error_response( $errormsg, %params )
+
+Takes an error message (typically a code) and optionally
+any extra parameters that might need to be returned, and
+generates a hashref with the appropriate content.
+
+=cut
+
+sub error_response {
+    my $self = shift;
+    my $error = shift || "";
+    my $args = $self->args(@_);
+
+    return {
+        status => "error",
+        error  => $error,
+        %$args,
+    };
+}
+
 1;
 
 =head1 AUTHOR

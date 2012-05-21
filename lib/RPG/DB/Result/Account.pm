@@ -34,6 +34,8 @@ The account id provides a reference into the account_auths table which
 holds data for various authentication methods such as local accounts or
 remote authentication via openid/facebook/etc.
 
+=head1 METHODS
+
 =cut
 
 use base qw/DBIx::Class::Core/;

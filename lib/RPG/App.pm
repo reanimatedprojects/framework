@@ -27,6 +27,9 @@ use Dancer::Plugin::DBIC qw(schema);
 
 use RPG::Messages;
 
+use strict;
+use warnings;
+
 # This can be time-consuming so do it once only on startup
 POSIX::setlocale(LC_MESSAGES, '');
 
@@ -72,7 +75,11 @@ post '/register' => sub {
 # These are includes for the different pages that aren't directly
 # included in this file.
 
-load "page/register_local.pl";
+# Using the Dancer keyword 'load' instead of the Perl keyword
+# 'require' seems to cause warnings about schema possibly being
+# reserved when used in the loaded file
+#
+require "page/register_local.pl";
 
 # Define any hooks here
 
