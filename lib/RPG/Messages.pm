@@ -66,10 +66,10 @@ sub new {
     bless $self, $class;
 }
 
-=head2 $str = $obj->message( $code_str )
+=head2 $str = $obj->message( $code_str, @params )
 
-This method takes a message and converts it to another language if
-the translation file is provided.
+This method takes a message (and optional parameters) and converts
+it to a human-readable language if there are translations available.
 
 =cut
 
@@ -77,8 +77,13 @@ sub message {
     my $self = shift;
     my $msg = shift;
 
-    return __"Unknown error" unless $msg;
-    return __$msg;
+    return "$msg: " . join ",", map { "\"$_\"" } @_;
+
+# See perldoc Locale::TextDomain for information about translating
+# strings containing parameters e.g __x() __n() and __nx()
+
+#    return __"Unknown error" unless $msg;
+#    return __$msg;
 }
 
 1;
