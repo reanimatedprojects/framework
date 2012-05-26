@@ -116,7 +116,7 @@ Verify the email address provided is a valid format
 =cut
 
 sub is_valid_email {
-    my $class = shift;
+    my $self = shift;
     my $email = shift || return $self->error_response(
         "EMAIL_INVALID", # MSG
     );
