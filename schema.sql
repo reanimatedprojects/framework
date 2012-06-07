@@ -4,8 +4,9 @@
  */
 CREATE TABLE accounts (
     account_id  INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-    email       CHAR(128),
-    PRIMARY KEY(account_id)
+    email       CHAR(128) NOT NULL,
+    PRIMARY KEY (account_id),
+    UNIQUE KEY email (email)
 );
 
 /* Not sure how to handle this - we should have some kind of username
@@ -18,8 +19,15 @@ CREATE TABLE account_auths (
     account_auth_id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
     account_id INT(10) UNSIGNED NOT NULL,
     auth_type CHAR(10) NOT NULL,
-    auth_params MEDIUMBLOB,
     PRIMARY KEY (account_auth_id),
     KEY account_id (account_id)
 );
 
+/* Local authentication requires a password */
+CREATE TABLE account_auths_local (
+    id INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+    account_auth_id INT(10) UNSIGNED NOT NULL,
+    password CHAR(40),
+    PRIMARY KEY (id),
+    UNIQUE KEY account_auth_id(account_auth_id)
+);

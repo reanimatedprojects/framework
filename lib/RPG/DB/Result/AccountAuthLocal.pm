@@ -1,7 +1,7 @@
-package RPG::DB::Result::AccountAuth;
+package RPG::DB::Result::AccountAuthLocal;
 
 # RPGWNN - Perl Browser-Based MMORPG Framework
-# Copyright (C) 2011-2012 Reanimated Projects and Games Ltd
+# Copyright (C) 2012 Reanimated Projects and Games Ltd
 
 # This file is part of RPGWNN
 #
@@ -23,12 +23,13 @@ package RPG::DB::Result::AccountAuth;
 
 use base qw/DBIx::Class::Core/;
 
-__PACKAGE__->table('account_auths');
-__PACKAGE__->add_columns(qw/account_auth_id account_id auth_type/);
-__PACKAGE__->set_primary_key('account_auth_id');
+__PACKAGE__->table('account_auths_local');
+__PACKAGE__->add_columns(qw/id account_auth_id password/);
+__PACKAGE__->set_primary_key('id');
+__PACKAGE__->add_unique_constraint('account_auth_id' => [qw/account_auth_id/]);
 __PACKAGE__->belongs_to(
-    account => 'RPG::DB::Result::Account',
-    'account_id'
+    account_auth => 'RPG::DB::Result::AccountAuth',
+    'account_auth_id'
 );
 
 1;
@@ -39,4 +40,4 @@ Simon Amor E<lt>simon@rpgwnn.comE<gt>
 
 =head1 COPYRIGHT
 
-Copyright (C) 2011-2012 Reanimated Projects and Games Ltd
+Copyright (C) 2012 Reanimated Projects and Games Ltd

@@ -1,4 +1,4 @@
-package RPG::DB::Result::AccountAuth;
+package RPG::DB::Base;
 
 # RPGWNN - Perl Browser-Based MMORPG Framework
 # Copyright (C) 2011-2012 Reanimated Projects and Games Ltd
@@ -21,17 +21,58 @@ package RPG::DB::Result::AccountAuth;
 # Contact information for Reanimated Projects and Games Ltd
 # can be found at http://rpgwnn.com/
 
-use base qw/DBIx::Class::Core/;
+use RPG::Base;
 
-__PACKAGE__->table('account_auths');
-__PACKAGE__->add_columns(qw/account_auth_id account_id auth_type/);
-__PACKAGE__->set_primary_key('account_auth_id');
-__PACKAGE__->belongs_to(
-    account => 'RPG::DB::Result::Account',
-    'account_id'
-);
+=head1 NAME
+
+RPG::DB::Base
+
+=head1 DESCRIPTION
+
+This module is for providing *some* but not all of the
+RPG::Base methods to the RPG::DB modules - for example,
+args, error_response and ok_response
+
+=head1 METHODS
+
+=head2 CLASS->args( )
+
+See RPG::Base->args( )
+
+=cut
+
+sub args {
+    my $self = shift;
+    return RPG::Base->args(@_);
+}
+
+=head2 CLASS->ok_response( %params )
+
+See RPG::Base->ok_response( )
+
+=cut
+
+sub ok_response {
+    my $self = shift;
+    return RPG::Base->ok_response(@_);
+}
+
+=head2 CLASS->error_response( $errormsg, %params )
+
+See RPG::Base->error_response( )
+
+=cut
+
+sub error_response {
+    my $self = shift;
+    return RPG::Base->error_response(@_);
+}
 
 1;
+
+=head1 SEE ALSO
+
+L<RPG::Base>
 
 =head1 AUTHOR
 

@@ -38,15 +38,118 @@ remote authentication via openid/facebook/etc.
 
 =cut
 
-use base qw/DBIx::Class::Core/;
+use base qw/DBIx::Class::Core RPG::DB::Base/;
+
+use Dancer ':syntax';
+
+use strict;
+use warnings;
 
 __PACKAGE__->table("accounts");
 __PACKAGE__->add_columns(qw/account_id email/);
 __PACKAGE__->set_primary_key('account_id');
+__PACKAGE__->add_unique_constraint("email" => [qw/email/]);
 __PACKAGE__->has_many(
     account_auths => 'RPG::DB::Result::AccountAuth',
     'account_id'
 );
+
+=head2 new()
+
+We override this method so that we can check the email
+address provided is valid in appearance. The email verification
+email/url will be used to check that it actually works.
+
+=cut
+
+sub new {
+    my ( $class, $attrs ) = @_;
+
+    # FIXME: Verify the email address is a valid-looking address
+    # FIXME: Check what to return if it's not - what does DBIx::Class do?
+    #
+    return undef unless ($attrs->{ email } &&
+        $attrs->{ email } =~ /\@/);
+
+    my $new = $class->next::method($attrs);
+    return $new;
+}
+
+=head2 register_auth_method( auth_type => "TYPE", ... )
+
+Add an authentication method to the current account. auth_type would be
+a word such as "local" and has corresponding files within the system.
+
+For example, the "local" authentication method (email + local password)
+has the following files associated with it.
+
+* lib/page/register_local.pl
+    - display the registration page for local accounts
+
+* views/register_local.tt
+    - the registration page template for local accounts
+
+* lib/RPG/Auth/Local.pm
+    - methods for processing local authentication (non-db)
+
+* lib/RPG/DB/Result/AccountAuthLocal.pm
+    - database module for local authentication
+
+=cut
+
+sub register_auth_method {
+    my $self = shift;
+    my $args = $self->args(@_);
+
+    my $auth_type = delete $args->{ auth_type };
+
+    return $self->error_response(
+        "ACCOUNT_AUTHTYPE_INVALID", # MSG
+    ) unless (defined $auth_type);
+
+    # The auth_type refers to a section within the auths part
+    # of config.yml and this section contains certain keys
+    # related to how the authentication method is used.
+    return $self->error_response(
+        "ACCOUNT_AUTHTYPE_INVALID", # MSG
+    ) unless (defined config->{ auths }{ $auth_type });
+
+    # Auth method $auth_type adding for account $self->{ id }
+
+    my $account_auth = $self->create_related( "account_auths", {
+        auth_type => $auth_type,
+    });
+
+    # If it failed to create the record, return an error
+    # This might happen if there are some unique keys and we
+    # already have a particular auth method registered for an
+    # account.
+    # FIXME: Nicer and more helpful error required
+    return $self->error_response(
+        "ACCOUNT_REGISTERAUTH_FAIL", # MSG
+    ) unless ($account_auth && $account_auth->account_auth_id);
+
+    # Added successfully? Create the linked record based on the auth_type
+    my $resultset = config->{ auths }{ $auth_type }{ table };
+
+    # The account_auth_XXXX record needs an account_auth_id
+    $args->{ account_auth_id } = $account_auth->account_auth_id;
+
+    # Create the linked record
+    my $schema = $self->result_source->schema;
+    my $authresult = $schema->resultset($resultset)->create( $args );
+    unless ($authresult) {
+        # If it failed, remove the account_auths record
+        $account_auth->delete();
+        return $self->error_response(
+            "ACCOUNT_REGISTERAUTH_FAIL", # MSG
+        );
+    }
+    # FIXME: Maybe return $self->ok_response() instead
+    return $self->ok_response(
+        account_auth => $account_auth,
+    );
+}
 
 1;
 

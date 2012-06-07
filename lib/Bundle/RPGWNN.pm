@@ -49,6 +49,8 @@ DBIx::Class 0.08195
 
 Dancer::Plugin::DBIC
 
+Try::Tiny
+
 =head1 AUTHOR
 
 Simon Amor E<lt>simon@rpgwnn.comE<gt>
