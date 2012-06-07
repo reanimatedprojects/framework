@@ -56,9 +56,9 @@ arguments based on the following rules:
 sub args {
     my $self = shift;
 
-    # No args passed except the object - probably an error!
+    # No args passed except the object - just an empty hash
     if (scalar(@_) == 0) {
-        return undef;
+        return {};
     }
 
     # One arg and first is a hashref, use it
