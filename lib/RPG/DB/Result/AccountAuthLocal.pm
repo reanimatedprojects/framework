@@ -30,12 +30,14 @@ __PACKAGE__->add_columns(
         size                => 11,
         is_nullable         => 0,
         is_auto_increment   => 1,
+        extra               => { unsigned => 1 },
     },
     account_auth_id => {
         data_type           => "integer",
         size                => 11,
         is_nullable         => 0,
         is_foreign_key      => 1,
+        extra               => { unsigned => 1 },
     },
     password => {
         data_type           => "char",

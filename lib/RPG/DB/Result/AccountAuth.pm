@@ -26,17 +26,19 @@ use base qw/DBIx::Class::Core/;
 __PACKAGE__->table('account_auths');
 __PACKAGE__->add_columns(
     account_auth_id => {
-      data_type         => 'integer',
-      size              => 11,
-      is_nullable       => 0,
-      is_auto_increment => 1,
-#      default_value     => 0,
+        data_type         => 'integer',
+        size              => 11,
+        is_nullable       => 0,
+        is_auto_increment => 1,
+#        default_value     => 0,
+        extra             => { unsigned => 1 },
     },
     account_id => {
         data_type       => "integer",
         size            => 11,
         is_nullable     => 0,
         is_foreign_key  => 1,
+        extra           => { unsigned => 1 },
     },
     auth_type => {
         data_type       => "char",
