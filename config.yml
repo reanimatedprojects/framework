@@ -55,3 +55,4 @@ auths:
   local:
     name: "Local account"
     module: "RPG::Auth::Local"
+    table: "AccountAuthLocal"

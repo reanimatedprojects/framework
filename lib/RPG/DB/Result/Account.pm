@@ -46,7 +46,19 @@ use strict;
 use warnings;
 
 __PACKAGE__->table("accounts");
-__PACKAGE__->add_columns(qw/account_id email/);
+__PACKAGE__->add_columns(
+    account_id => {
+        data_type           => "integer",
+        size                => 11,
+        is_auto_increment   => 1,
+        extra               => { unsigned => 1 },
+    },
+    email => {
+        data_type           => "char",
+        size                => 128,
+        is_nullable         => 0,
+    },
+);
 __PACKAGE__->set_primary_key('account_id');
 __PACKAGE__->add_unique_constraint("email" => [qw/email/]);
 __PACKAGE__->has_many(

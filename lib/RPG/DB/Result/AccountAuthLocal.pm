@@ -24,7 +24,25 @@ package RPG::DB::Result::AccountAuthLocal;
 use base qw/DBIx::Class::Core/;
 
 __PACKAGE__->table('account_auths_local');
-__PACKAGE__->add_columns(qw/id account_auth_id password/);
+__PACKAGE__->add_columns(
+    id => {
+        data_type           => "integer",
+        size                => 11,
+        is_nullable         => 0,
+        is_auto_increment   => 1,
+    },
+    account_auth_id => {
+        data_type           => "integer",
+        size                => 11,
+        is_nullable         => 0,
+        is_foreign_key      => 1,
+    },
+    password => {
+        data_type           => "char",
+        size                => 40,
+        is_nullable         => 0,
+    },
+);
 __PACKAGE__->set_primary_key('id');
 __PACKAGE__->add_unique_constraint('account_auth_id' => [qw/account_auth_id/]);
 __PACKAGE__->belongs_to(

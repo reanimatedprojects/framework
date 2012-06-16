@@ -24,7 +24,26 @@ package RPG::DB::Result::AccountAuth;
 use base qw/DBIx::Class::Core/;
 
 __PACKAGE__->table('account_auths');
-__PACKAGE__->add_columns(qw/account_auth_id account_id auth_type/);
+__PACKAGE__->add_columns(
+    account_auth_id => {
+      data_type         => 'integer',
+      size              => 11,
+      is_nullable       => 0,
+      is_auto_increment => 1,
+#      default_value     => 0,
+    },
+    account_id => {
+        data_type       => "integer",
+        size            => 11,
+        is_nullable     => 0,
+        is_foreign_key  => 1,
+    },
+    auth_type => {
+        data_type       => "char",
+        size            => 10,
+        is_nullable     => 0,
+    },
+);
 __PACKAGE__->set_primary_key('account_auth_id');
 __PACKAGE__->belongs_to(
     account => 'RPG::DB::Result::Account',
