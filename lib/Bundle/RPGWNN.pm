@@ -47,6 +47,8 @@ YAML::Any 0.72
 
 DBIx::Class 0.08195
 
+DBIx::Class::PassphraseColumn
+
 Dancer::Plugin::DBIC
 
 Try::Tiny

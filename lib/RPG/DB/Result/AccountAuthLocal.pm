@@ -23,6 +23,7 @@ package RPG::DB::Result::AccountAuthLocal;
 
 use base qw/DBIx::Class::Core/;
 
+__PACKAGE__->load_components(qw/PassphraseColumn/);
 __PACKAGE__->table('account_auths_local');
 __PACKAGE__->add_columns(
     id => {
@@ -40,9 +41,15 @@ __PACKAGE__->add_columns(
         extra               => { unsigned => 1 },
     },
     password => {
-        data_type           => "char",
-        size                => 40,
+        data_type           => "text",
         is_nullable         => 0,
+        passphrase          => 'rfc2307',
+        passphrase_class    => 'SaltedDigest',
+        passphrase_args     => {
+            algorithm       => 'SHA-1',
+            salt_random     => 20,
+        },
+        passphrase_check_method => "check_password",
     },
 );
 __PACKAGE__->set_primary_key('id');
