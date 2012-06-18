@@ -113,8 +113,10 @@ post '/register/local' => sub {
                 );
 # 3.2.2.1
                 # FIXME: Login newly created account
+                session "account_id" => $new_account->account_id;
 # 3.2.2.2
                 # FIXME: redirect to account page
+                return redirect "/account";
             } else {
 # 3.2.3
 
