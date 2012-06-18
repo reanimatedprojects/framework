@@ -142,6 +142,8 @@ sub register_auth_method {
     ) unless ($account_auth && $account_auth->account_auth_id);
 
     # Added successfully? Create the linked record based on the auth_type
+    # FIXME: watch out here as there is no trap for undefined
+    # resultset variable in the config.yml!
     my $resultset = config->{ auths }{ $auth_type }{ table };
 
     # The account_auth_XXXX record needs an account_auth_id
@@ -157,7 +159,8 @@ sub register_auth_method {
             "ACCOUNT_REGISTERAUTH_FAIL", # MSG
         );
     }
-    # FIXME: Maybe return $self->ok_response() instead
+    # we have to return $self->ok_response() so that we can test
+    # the status attribute and have it work for both errors and ok
     return $self->ok_response(
         account_auth => $account_auth,
     );
