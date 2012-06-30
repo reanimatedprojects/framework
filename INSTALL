@@ -1,8 +1,23 @@
 Installing the RPGWNN framework and prerequisites
 =================================================
 
-Pre-requisites
-==============
+1. Pre-requisites
+2. Perl modules
+3. Database
+
+------------------------------------------------------------------------
+
+1. Pre-requisites
+=================
+
+A working installation of Perl, including the CPAN module.
+
+MySQL (or another database supported by Dancer)
+
+------------------------------------------------------------------------
+
+2. Perl modules
+===============
 
 RPGWNN requires a few Perl modules to be installed in addition to
 the core modules that come with any modern Perl installation.
@@ -17,7 +32,6 @@ helpers and adapters to web servers.
 Information about Dancer can be found at http://perldancer.org/
 
 Information about Plack can be found at http://plackperl.org/
-
 
 Automatic installation of prerequisites
 ---------------------------------------
@@ -45,7 +59,7 @@ Installation of these modules and their dependencies can be done
   perl -MCPAN -e 'install Plack; install Dancer;
     install Template; install YAML::Any;'
 
-------------------------------------------------------------------------------
+------------------------------------------------------------------------
 
 Database
 ========
@@ -67,11 +81,16 @@ a shell prompt and connect to the database.
 
  mysql -urpg_user -prpg_pass rpg_db
 
-Next, import the database schema (schema.sql) to create the table
-structure.
-
- mysql -urpg_user -prpg_pass rpg_db < schema.sql
-
 If you change the database details, also ensure that config.yml is
 updated with the new information.
 
+Next, run the database schema deployment script to create the table
+structure.
+
+******* WARNING *** WARNING *** WARNING *** WARNING *** WARNING ********
+
+This step _WILL_ destroy any tables that have already been created.
+
+ perl scripts/deploy_db_schema.pl
+
+------------------------------------------------------------------------
