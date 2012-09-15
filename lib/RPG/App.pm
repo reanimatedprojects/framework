@@ -131,11 +131,11 @@ require "page/login_local.pl";
 # Set it for one day from now.
 hook after_file_render => sub {
     my $response = shift;
-    my $cache_age = 86400;
+    my $cache_age = 86_400;
 
-    $response->header( "Cache-Control" => "max-age=$cache_age" );
-    $response->header( "Expires" => POSIX::strftime(
-        "%a, %d %b %Y %H:%M:%S GMT", gmtime( time() + $cache_age ) ) );
+    $response->header( 'Cache-Control' => "max-age=$cache_age" );
+    $response->header( 'Expires' => POSIX::strftime(
+        '%a, %d %b %Y %H:%M:%S GMT', gmtime( time() + $cache_age ) ) );
     return $response;
 };
 
