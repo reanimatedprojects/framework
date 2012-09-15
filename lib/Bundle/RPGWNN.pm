@@ -45,6 +45,8 @@ Template 2.22
 
 YAML::Any 0.72
 
+DBD::mysql
+
 DBIx::Class 0.08195
 
 DBIx::Class::PassphraseColumn
@@ -52,6 +54,8 @@ DBIx::Class::PassphraseColumn
 Dancer::Plugin::DBIC
 
 Try::Tiny
+
+Locale::Messages
 
 =head1 AUTHOR
 
