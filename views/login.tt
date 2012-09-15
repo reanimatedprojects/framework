@@ -1,0 +1,17 @@
+<div style='width:300px;margin:30px auto 0px auto'>
+
+<form method="post" action="/login">
+<fieldset>
+<legend>Login using</legend>
+<ul style='list-style-type:none'>
+[% # Make sure the local account option is always first.
+   IF auths.local %]<li><input id="at_local" name="auth_type" type="radio" value="local" checked="checked" /><label for="at_local">Local account</label></li>[% END %]
+[% # Then loop through any other authentication methods
+   FOREACH at IN auths.keys; NEXT IF at == "local" %]<li><input id="at_[% at %]" name="auth_type" type="radio" value="[% at %]" /><label for="at_[% at %]">[% auths.$at.name %]</label></li>
+[% END %]
+</ul>
+<input style='float:right' type="submit" value="Continue" />
+</fieldset>
+</form>
+
+</div>

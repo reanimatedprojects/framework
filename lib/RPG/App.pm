@@ -72,6 +72,44 @@ post '/register' => sub {
     template "register" => { auths => config->{ auths } };
 };
 
+get '/login' => sub {
+    # Figure out if there's somewhere we need to be returned back to
+    my $source = session->{ requested_path };
+    if (defined $source) {
+        debug "Source is $source";
+    } else {
+        debug "Direct to /login";
+    }
+    $source ||= "/account";
+
+    # More than one auth method? If so, prompt for login method
+    my @auth_keys = keys %{config->{ auths }};
+    if (scalar(@auth_keys) == 1) {
+        my $auth_key = shift @auth_keys;
+        return redirect "/login/" . $auth_key;
+    }
+    template "login" => { auths => config->{ auths } };
+};
+
+post '/login' => sub {
+    # Validate the form values from the first page
+
+    # Only value is the authentication method (auth_type)
+    my $auth_param = param("auth_type");
+    # If no auth parameter was provided, just show the template page
+    unless ($auth_param) {
+        template "login" => { auths => config->{ auths } }
+    }
+
+    # Extract the auth information
+    my $auth_info = config->{ auths }{ $auth_param };
+    if ($auth_info && $auth_info) {
+        # Redirect to the relevant registration page
+        return redirect "/login/" . $auth_param;
+    }
+    template "login" => { auths => config->{ auths } };
+};
+
 # These are includes for the different pages that aren't directly
 # included in this file.
 
@@ -81,7 +119,11 @@ require "page/account.pl";
 # 'require' seems to cause warnings about schema possibly being
 # reserved when used in the loaded file
 #
+# Register a local account (email+password)
 require "page/register_local.pl";
+
+# Login with a local account (email+password)
+require "page/login_local.pl";
 
 # Define any hooks here
 
