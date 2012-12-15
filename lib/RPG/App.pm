@@ -113,6 +113,7 @@ post '/login' => sub {
 # These are includes for the different pages that aren't directly
 # included in this file.
 
+# Main account page (must be logged in)
 require "page/account.pl";
 
 # Using the Dancer keyword 'load' instead of the Perl keyword

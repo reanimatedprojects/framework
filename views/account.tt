@@ -2,3 +2,4 @@
 
 <p>You are logged in as account id [% session.account_id %]</p>
 
+<p>[% account.email %]</p>

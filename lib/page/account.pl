@@ -32,7 +32,29 @@ use warnings;
 
 # Local account creation
 get '/account' => sub {
-    template "account";
+    my $vars = { };
+
+    unless (session('account_id')) {
+        debug "account id not found in session";
+        # Set where to redirect back to after logging in
+        session 'source' => '/account';
+        return redirect "/login";
+    }
+
+    my $account = schema->resultset("Account")->find({
+        account_id => session('account_id'),
+    });
+    $vars->{ account } = $account;
+
+    unless ($account) {
+        debug "account id ", session('account_id'), " not found.";
+        # Set where to redirect back to after logging in
+        session 'source' => '/account';
+        return redirect "/login";
+    }
+
+    # Display the account page
+    template "account" => $vars;
 };
 
 true;
