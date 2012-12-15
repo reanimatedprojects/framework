@@ -1,5 +1,8 @@
-<div style='width:300px;text-align:right;margin:30px auto 0px auto'>
+[% IF result %]
+<div class="infobox [% result.status %]">[% result.message OR result.error %]</div>
+[% END %]
 
+<div style='width:300px;text-align:right;margin:30px auto 0px auto'>
 <form method="POST" action="/login/local">
 <fieldset>
 <legend>Login</legend>
