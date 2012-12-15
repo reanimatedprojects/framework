@@ -1,0 +1,18 @@
+[% IF result %]
+<div class="infobox [% result.status %]">[% result.message OR result.error %]</div>
+[% END %]
+[% IF account %]
+<p><a href="[% reset_url %]">[% reset_url %]</a></p>
+[% RETURN; END %]
+
+<div style='width:300px;text-align:right;margin:30px auto 0px auto'>
+
+<form method="POST" action="/login/local/pwrecover">
+<fieldset>
+<legend>Recover your password</legend>
+<label for="email">Email:</label><input type="text" name="email"><br>
+<input type="submit" value="Send password reset email">
+</fieldset>
+</form>
+
+</div>

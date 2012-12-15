@@ -57,6 +57,8 @@ Try::Tiny
 
 Locale::Messages
 
+URI::Escape
+
 =head1 AUTHOR
 
 Simon Amor E<lt>simon@rpgwnn.comE<gt>

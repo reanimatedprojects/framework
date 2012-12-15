@@ -166,6 +166,60 @@ sub register_auth_method {
     );
 }
 
+=head2 fetch_auth_method( auth_type => "TYPE", ... )
+
+Fetch an authentication method for the current account. auth_type would be
+a word such as "local" and has corresponding files within the system.
+
+=cut
+
+sub fetch_auth_method {
+    my $self = shift;
+    my $args = $self->args(@_);
+
+    my $auth_type = delete $args->{ auth_type };
+
+    return $self->error_response(
+        "ACCOUNT_AUTHTYPE_INVALID", # MSG
+    ) unless (defined $auth_type);
+
+    # The auth_type refers to a section within the auths part
+    # of config.yml and this section contains certain keys
+    # related to how the authentication method is used.
+    return $self->error_response(
+        "ACCOUNT_AUTHTYPE_INVALID", # MSG
+    ) unless (defined config->{ auths }{ $auth_type });
+
+    # Auth method $auth_type fetch for account $self->{ id }
+    my $account_auths = $self->account_auths->search({
+        auth_type => $auth_type,
+    });
+
+    my @account_auth_array = $account_auths->all();
+    if (scalar(@account_auth_array) != 1) {
+        return $self->error_response(
+            "ACCOUNT_AUTHTYPE_INVALID", # MSG
+        );
+    }
+    my $account_auth = shift @account_auth_array;
+
+    # Fetch the linked record based on the auth_type
+    # FIXME: watch out here as there is no trap for undefined
+    # resultset variable in the config.yml!
+    my $resultset = config->{ auths }{ $auth_type }{ table };
+
+    my $schema = $self->result_source->schema;
+    my $authresult = $schema->resultset($resultset)->search({
+        account_auth_id => $account_auth->id(),
+    })->first();
+
+    # we have to return $self->ok_response() so that we can test
+    # the status attribute and have it work for both errors and ok
+    return $self->ok_response(
+        account_auth => $authresult,
+    );
+}
+
 1;
 
 =head1 AUTHOR

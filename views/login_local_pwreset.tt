@@ -1,0 +1,23 @@
+<div style='width:300px;text-align:right;margin:30px auto 0px auto'>
+[% IF result.status == 'error' %]
+    <p class="error">[% result.error %]</p>
+    <p><a href="/login/local/pwrecover">Recover password</a></p>
+</div>
+[% RETURN; END %]
+<p>Resetting the password for [% account.email %]</p>
+[% IF result # Usually a warning or ok %]
+    <p>[% result.message %]</p>
+</div>
+[% IF result.status == 'ok'; RETURN; END;
+   END %]
+
+<form method="POST" action="/login/local/pwreset">
+<input type="hidden" name="acc" value="[% acc %]">
+<fieldset>
+<legend>Reset password</legend>
+<label for="password1">New Password:</label><input type="password" name="password1"><br>
+<label for="password2">Confirm Password:</label><input type="password" name="password2"><br>
+<input type="submit" value="Reset">
+</fieldset>
+</form>
+</div>

@@ -23,6 +23,9 @@ package RPG::Utils;
 
 use base "RPG::Base";
 
+use Digest::SHA;
+use URI::Escape qw();
+
 =head1 NAME
 
 RPG::Utils - assorted functions
@@ -123,6 +126,51 @@ sub is_valid_email {
 
     return $self->ok_response();
 }
+
+=head2 $checksum = RPG::Utils->calc_checksum( $string )
+
+Calculate the checksum (SHA512) of the given string.
+
+=cut
+
+sub calc_checksum {
+    my $self = shift;
+    my $string = shift || return undef;
+
+    return Digest::SHA::sha512_base64($string);
+}
+
+=head2 $short_checksum = RPG::Utils->short_checksum( $string, $secret )
+
+Returns a 10 character section of the checksum calculated
+by appending the secret (if provided) to the string.
+
+=cut
+
+sub short_checksum {
+    my $self = shift;
+    my $string = shift || return undef;
+    my $secret = shift || "";
+
+    if ($secret) {
+        $string .= "/$secret";
+    }
+
+    return substr(
+        $self->calc_checksum($string, $secret), 10, 20
+    );
+}
+
+sub uri_unescape {
+    my $self = shift;
+    return URI::Escape::uri_unescape(@_);
+}
+
+sub uri_escape {
+    my $self = shift;
+    return URI::Escape::uri_escape(@_);
+}
+
 
 1;
 
