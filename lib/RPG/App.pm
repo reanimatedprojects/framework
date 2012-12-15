@@ -126,6 +126,9 @@ require "page/register_local.pl";
 # Login with a local account (email+password)
 require "page/login_local.pl";
 
+# Logout of any account
+require "page/logout.pl";
+
 # Define any hooks here
 
 # Add Expires and Cache-Control headers to static content (css, images etc)
