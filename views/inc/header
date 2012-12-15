@@ -1,5 +1,9 @@
 <div id="header">
 <a href="/">Home</a>
+[% IF session.account_id %]
+<a href="/logout">Logout</a>
+[% ELSE %]
 <a href="/register">Register</a>
 <a href="/login">Login</a>
+[% END %]
 </div>
