@@ -59,6 +59,8 @@ Locale::Messages
 
 URI::Escape
 
+Mail::RFC822::Address
+
 =head1 AUTHOR
 
 Simon Amor E<lt>simon@rpgwnn.comE<gt>

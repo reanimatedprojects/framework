@@ -25,6 +25,7 @@ use base "RPG::Base";
 
 use Digest::SHA;
 use URI::Escape qw();
+use Mail::RFC822::Address qw();
 
 =head1 NAME
 
@@ -123,6 +124,15 @@ sub is_valid_email {
     my $email = shift || return $self->error_response(
         "EMAIL_INVALID", # MSG
     );
+
+    # Even though it means requiring another module, we
+    # don't have to read RFC5321 and 5322 to determine
+    # what constitutes a valid email address.
+    unless (Mail::RFC822::Address::valid($email)) {
+        return $self->error_response(
+            "EMAIL_INVALID", # MSG
+        );
+    }
 
     return $self->ok_response();
 }
