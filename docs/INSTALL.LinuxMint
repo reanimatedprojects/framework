@@ -1,0 +1,23 @@
+Start machine, booting from 32 bit Mint 14 ISO
+
+Configure user as 'rpgadmin' (if not, then use other username in the mysql below)
+
+sudo su -
+apt-get update
+apt-get install mysql-server git libmysqlclient-dev libnet-http-perl libwww-perl libxml-libxml-perl libxml-perl libyaml-libyaml-perl libyaml-tiny-perl
+Enter blank password for mysql root (3 times!)
+
+mysql -uroot
+mysql> grant all on test.* to 'rpgadmin'@'localhost';
+mysql> create database rpg_db;
+mysql> grant all on rpg_db.* to 'rpg_user'@'localhost' identified by 'rpg_pass';
+mysql> exit
+
+exit
+
+git clone https://github.com/rpgwnn/framework rpg
+cd rpg/lib
+
+perl -MCPAN -le 'install Bundle::RPGWNN'
+
+When configuring CPAN, use 'sudo' as the install method instead of local::lib
