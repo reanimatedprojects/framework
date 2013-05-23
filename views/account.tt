@@ -3,3 +3,20 @@
 <p>You are logged in as account id [% session.account_id %]</p>
 
 <p>[% account.email %]</p>
+
+<p>[% SET character_rs = account.characters_rs;
+      SET characters = character_rs.all;
+    "You have "; character_rs.count; " character"; 's' IF character_rs.count != 1 %].</p>
+
+<table>
+<tr>
+    <th>Id</th>
+    <th>Name</th>
+</tr>
+[% FOREACH character IN characters -%]
+<tr>
+    <td>[% character.character_id %]</td>
+    <td>[% character.name %]</td>
+</tr>
+[% END %]
+</table>
