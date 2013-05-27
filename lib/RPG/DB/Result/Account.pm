@@ -58,6 +58,12 @@ __PACKAGE__->add_columns(
         size                => 128,
         is_nullable         => 0,
     },
+    max_characters => {
+        data_type           => "integer",
+        size                => 4,
+        extra               => { unsigned => 1 },
+        is_nullable         => 0,
+    },
 );
 __PACKAGE__->set_primary_key('account_id');
 __PACKAGE__->add_unique_constraint("email" => [qw/email/]);
@@ -86,6 +92,12 @@ sub new {
     #
     return undef unless ($attrs->{ email } &&
         $attrs->{ email } =~ /\@/);
+
+    # Set the default number of characters allowed. This is used rather
+    # than setting a default_value in the add_columns definition because
+    # that would require re-fetching the row after inserting it.
+    $attrs->{ max_characters } = 3
+        unless exists $attrs->{ max_characters };
 
     my $new = $class->next::method($attrs);
     return $new;
