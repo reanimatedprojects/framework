@@ -4,6 +4,8 @@
 <p>XP: [% character.xp %]</p>
 
 <p>Belongs to account [% character.account_id %].</p>
+
+<p>Description: [% character.description.first.description %]</p>
 [% ELSE %]
 <p>Character not found.</p>
 [% END %]
