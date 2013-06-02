@@ -64,12 +64,27 @@ __PACKAGE__->add_columns(
         size                => 64,
         is_nullable         => 0,
     },
+    xp => {
+        data_type           => "integer",
+        size                => 11,
+        is_nullable         => 0,
+        extra               => { unsigned => 1 },
+    },
+    disabled => {
+        data_type           => "char",
+        size                => 10,
+        is_nullable         => 0,
+    },
 );
 __PACKAGE__->set_primary_key('character_id');
 __PACKAGE__->add_unique_constraint("name" => [qw/name/]);
 __PACKAGE__->belongs_to(
     account => 'RPG::DB::Result::Account',
     'account_id'
+);
+__PACKAGE__->might_have(
+    description => 'RPG::DB::Result::CharacterDescription',
+    'character_id'
 );
 
 =head2 new()
@@ -88,6 +103,9 @@ sub new {
     #
     return undef unless ($attrs->{ name } &&
         $attrs->{ name } =~ /^[a-z0-9A-Z]{5,64}$/);
+
+    $attrs->{ disabled } //= "";
+    $attrs->{ xp } //= 0;
 
     my $new = $class->next::method($attrs);
     return $new;

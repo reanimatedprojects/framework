@@ -1,0 +1,12 @@
+<h1>Create a character</h1>
+
+<form>
+Name: <input type="text" name="character_name" id="character_name" size="20">
+<input type="submit" value="Create">
+</form>
+
+<p>Perform name availability check via javascript/ajax.<br>
+Request: Character name only at present.<br>
+Response: Available, Invalid, Taken
+</p>
+

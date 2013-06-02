@@ -1,0 +1,9 @@
+[% IF character %]
+<h1>[% character.name %] ([% character.character_id %])</h1>
+
+<p>XP: [% character.xp %]</p>
+
+<p>Belongs to account [% character.account_id %].</p>
+[% ELSE %]
+<p>Character not found.</p>
+[% END %]

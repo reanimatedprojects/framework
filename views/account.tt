@@ -8,6 +8,8 @@
       SET characters = character_rs.all;
     "You have "; character_rs.count; " character"; 's' IF character_rs.count != 1 %] out of a maximum of [% account.max_characters %].</p>
 
+[% IF character_rs.count < account.max_characters %]<p><a href="/character/create">Create a new character</a></p>[% END %]
+
 <table>
 <tr>
     <th>Id</th>
