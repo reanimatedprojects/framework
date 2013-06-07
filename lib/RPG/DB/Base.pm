@@ -22,6 +22,8 @@ package RPG::DB::Base;
 # can be found at http://rpgwnn.com/
 
 use RPG::Base;
+use strict;
+use warnings;
 
 =head1 NAME
 

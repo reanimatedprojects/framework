@@ -23,6 +23,9 @@ package RPG::DB::Result::AccountAuth;
 
 use base qw/DBIx::Class::Core/;
 
+use strict;
+use warnings;
+
 __PACKAGE__->table('account_auths');
 __PACKAGE__->add_columns(
     account_auth_id => {

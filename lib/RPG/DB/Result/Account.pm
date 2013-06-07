@@ -90,7 +90,7 @@ sub new {
     # FIXME: Verify the email address is a valid-looking address
     # FIXME: Check what to return if it's not - what does DBIx::Class do?
     #
-    return undef unless ($attrs->{ email } &&
+    return unless ($attrs->{ email } &&
         $attrs->{ email } =~ /\@/);
 
     # Set the default number of characters allowed. This is used rather

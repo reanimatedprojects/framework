@@ -101,7 +101,7 @@ sub new {
     # FIXME: Check what to return if it's not - what does DBIx::Class do?
     # FIXME: 5-64 alphanumeric characters
     #
-    return undef unless ($attrs->{ name } &&
+    return unless ($attrs->{ name } &&
         $attrs->{ name } =~ /^[a-z0-9A-Z]{5,64}$/);
 
     $attrs->{ disabled } //= "";

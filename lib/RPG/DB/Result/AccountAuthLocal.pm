@@ -23,6 +23,9 @@ package RPG::DB::Result::AccountAuthLocal;
 
 use base qw/DBIx::Class::Core/;
 
+use strict;
+use warnings;
+
 __PACKAGE__->load_components(qw/PassphraseColumn/);
 __PACKAGE__->table('account_auths_local');
 __PACKAGE__->add_columns(

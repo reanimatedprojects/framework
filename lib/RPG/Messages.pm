@@ -23,6 +23,8 @@ package RPG::Messages;
 
 use Locale::Messages; # qw(:libintl_h); adding this causes warnings
 use Locale::TextDomain ("com.rpgwnn");
+use strict;
+use warnings;
 
 =head1 NAME
 

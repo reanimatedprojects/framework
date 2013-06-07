@@ -26,6 +26,8 @@ use base "RPG::Base";
 use Digest::SHA;
 use URI::Escape qw();
 use Mail::RFC822::Address qw();
+use strict;
+use warnings;
 
 =head1 NAME
 
@@ -145,7 +147,7 @@ Calculate the checksum (SHA512) of the given string.
 
 sub calc_checksum {
     my $self = shift;
-    my $string = shift || return undef;
+    my $string = shift || return;
 
     return Digest::SHA::sha512_base64($string);
 }
@@ -159,7 +161,7 @@ by appending the secret (if provided) to the string.
 
 sub short_checksum {
     my $self = shift;
-    my $string = shift || return undef;
+    my $string = shift || return;
     my $secret = shift || "";
 
     if ($secret) {
