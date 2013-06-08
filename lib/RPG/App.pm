@@ -132,6 +132,9 @@ require "page/login_local.pl";
 # Logout of any account
 require "page/logout.pl";
 
+# Character profile
+require "page/character.pl";
+
 # Define any hooks here
 
 # Add Expires and Cache-Control headers to static content (css, images etc)
