@@ -54,7 +54,7 @@ post '/login/local' => sub {
 #       4.2.1 Compare the (hashed) password with the hash of the one given
 #       4.2.2 If it matches,
 #           4.2.2.1 log the user in (set session vars)
-#           4.2.2.2 If there's a 'source' defined in session
+#           4.2.2.2 If there's a 'requested_path' defined in session
 #               4.2.2.2.1 redirect to it
 #           4.2.2.3 else redirect to account page
 #       4.2.3 else login error (bad password)
@@ -111,12 +111,12 @@ post '/login/local' => sub {
                 session 'account_id' => $account->account_id;
 
                 my $destination = '/account';
-                # If there's a 'source' defined in session, use it as the
-                # destination url (removing a / if there's one already)
-                if (session('source')) {
-                    $destination = '/' . session('source');
-                    # Remove the source definition
-                    session source => undef;
+                # If there's a 'requested_path' defined in session, use it as
+                # the destination url (removing a / if there's one already)
+                if (session('requested_path')) {
+                    $destination = '/' . session('requested_path');
+                    # Remove the requested_path definition
+                    session 'requested_path' => undef;
                 }
                 # Strip any duplicate leading / from the URL
                 $destination =~ s#^/+#/#;
