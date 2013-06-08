@@ -43,6 +43,16 @@ get '/account' => sub {
     }
     $vars->{ account } = $account;
 
+    $vars->{ message } = session('account_message');
+    if ($vars->{ message }) {
+        unless (ref($vars->{ message })) {
+            $vars->{ message } = {
+                status => "info",
+                message => $vars->{ message },
+            };
+        }
+        session 'account_message' => undef;
+    }
 
     # Display the account page
     template "account" => $vars;
