@@ -77,7 +77,7 @@ post '/register' => sub {
 
 get '/login' => sub {
     # Figure out if there's somewhere we need to be returned back to
-    my $source = session->{ requested_path };
+    my $source = session('requested_path');
     if (defined $source) {
         debug "Source is $source";
     } else {
