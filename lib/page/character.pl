@@ -47,24 +47,10 @@ get '/character' => sub {
 get '/character/create' => sub {
     my $vars = { };
 
-    unless (session('account_id')) {
-        debug "account id not found in session";
-        # Set where to redirect back to after logging in
-        session 'source' => '/account';
-        return redirect "/login";
-    }
+    my $account = fetch_account();
+    if (! $account) { return; }
 
-    my $account = schema->resultset("Account")->find({
-        account_id => session('account_id'),
-    });
     $vars->{ account } = $account;
-
-    unless ($account) {
-        debug "account id ", session('account_id'), " not found.";
-        # Set where to redirect back to after logging in
-        session 'source' => '/character';
-        return redirect "/login";
-    }
 
     # Display the account page
     template "character_create" => $vars;

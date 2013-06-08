@@ -25,7 +25,10 @@ use Dancer ':syntax';
 use POSIX;
 use Dancer::Plugin::DBIC qw(schema);
 
+# We want message() from RPG::Messages
 use RPG::Messages;
+# We want args() from RPG::Base
+use RPG::Base;
 
 use strict;
 use warnings;
@@ -143,6 +146,57 @@ hook after_file_render => sub {
     return $response;
 };
 
+=head2 fetch_account( [ no_redirect => 1 ] )
+
+If no_redirect is true, the account is optional so if the user isn't
+logged in we won't setup a redirect to /login - need to check $account
+before attempting to use it though!
+
+    my $account = fetch_account( no_redirect => 1 );
+
+If false (or omitted) the account is required for access to the page
+and the redirect to /login will be setup so the calling function can
+do something like:
+
+    my $account = fetch_account();
+    if (! $account) { return; }
+
+=cut
+
+sub fetch_account {
+    # If this function is passed a true value, the account is optional
+    # and we will simply return undef
+    my $args = RPG::Base->args(@_);
+
+    if (! session('account_id')) {
+        # If a valid account is required, redirect to /login
+        if (! $args->{ no_redirect }) {
+            session 'requested_path' => request->path_info;
+            debug 'Redirecting to /login from ' . session('requested_path');
+            redirect '/login';
+        }
+        # Return an undef value (optional=1 results in no account returned)
+        return;
+    }
+
+    my $account = schema->resultset("Account")->find({
+        account_id => session('account_id'),
+    });
+
+    # This would only be empty if the session contained an account id
+    # that had been deleted. Since we shouldn't ever delete accounts
+    # this is hopefully never going to be executed and is included for
+    # completeness.
+    if ((! $account) && (! $args->{ no_redirect })) {
+        debug "session account_id " . session('account_id') .  " not found in db.";
+        session 'requested_path' => request->path_info;
+        session 'account_id' => undef;
+        debug 'Redirecting to /login from ' . session('requested_path');
+        return redirect '/login';
+    }
+
+    return $account;
+}
 
 sub message {
     return RPG::Messages->message(@_);
