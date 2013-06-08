@@ -52,6 +52,17 @@ get '/character/create' => sub {
 
     $vars->{ account } = $account;
 
+    # Check the limit hasn't been reached yet
+    my @account_characters = $account->characters();
+    if (scalar(@account_characters) >= $account->max_characters()) {
+        session 'account_message' => RPG::Base->error_response(
+            "ACCOUNT_MAX_CHARACTERS", # MSG
+            current => scalar(@account_characters),
+            maximum => $account->max_characters(),
+        );
+        return redirect "/account";
+    }
+
     # Display the account page
     template "character_create" => $vars;
 };
