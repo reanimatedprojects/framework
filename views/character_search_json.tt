@@ -1,0 +1,1 @@
+[% IF status == "error"; GET '{"error":' _ error_line _ '}'; ELSE; content; END %]

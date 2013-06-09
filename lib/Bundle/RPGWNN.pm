@@ -61,6 +61,15 @@ URI::Escape
 
 Mail::RFC822::Address
 
+JSON
+
+JSON::XS
+
+=head1 NOTES
+
+JSON::XS is optional - if it's not installed, JSON will fallback to using
+the pure Perl version which is part of Perl 5.14 onwards.
+
 =head1 AUTHOR
 
 Simon Amor E<lt>simon@rpgwnn.comE<gt>

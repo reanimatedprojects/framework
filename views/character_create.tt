@@ -1,12 +1,73 @@
 <h1>Create a character</h1>
 
-<form>
-Name: <input type="text" name="character_name" id="character_name" size="20">
-<input type="submit" value="Create">
+<form action="/character/create" method="POST">
+<p>Name: <input type="text" name="character_name" id="character_name" size="20"> <img style='vertical-align:middle' id="nameresult" src="/images/res-cross.gif"> <input type="submit" value="Create"></p>
 </form>
 
-<p>Perform name availability check via javascript/ajax.<br>
-Request: Character name only at present.<br>
-Response: Available, Invalid, Taken
-</p>
+<script type="text/javascript">
+$(document).ready(function(){
+    var previous_name = "";
+    var jsonlocn = $("img#nameresult").parent();
 
+    // This won't catch anything like pasting a character name!
+    $("input#character_name").keyup(function() {
+        var tryname = $("input#character_name").val();
+        if (previous_name != $("input#character_name").val()) {
+            previous_name = $("input#character_name").val();
+        } else {
+            // Don't keep checking the name unless it's actually changed
+            return;
+        }
+        // Can't be less than 3 characters or more than
+        // 64 (size of characters.name in db)
+        if ((tryname.length < 3) || (tryname.length > 64)) {
+            // Taken result (/images/res-cross.gif)
+            $("img#nameresult").attr("src", "/images/res-cross.gif");
+            if (tryname.length < 3) {
+                update_message("Sorry, try something a bit longer (3 or more characters)");
+            } else if (tryname.length > 64) {
+                update_message("Sorry, try something a bit shorter (up to 64 characters)");
+            }
+            return;
+        }
+        $.ajax({
+            url: "/character/search",
+            dataType: "json",
+            data: {"character_name":$("input#character_name").val()},
+            success: function(data) {
+                if (data.error && data.error.length > 0) {
+// Invalid name result (/images/res-cross.gif)
+                    $("img#nameresult").attr("src", "/images/res-cross.gif");
+                    update_message(data.error);
+                } else if (data.exists && data.exists == 1) {
+// Taken result (/images/res-cross.gif)
+                    $("img#nameresult").attr("src","/images/res-cross.gif");
+                    update_message("That name is already taken.");
+                } else if (data.ok && data.ok == 1) {
+// OK means the name is available to use
+                    $("img#nameresult").attr("src","/images/res-tick.gif");
+                    update_message("That name is available to use.");
+                } else {
+// Unknown result (/images/res-cross.gif)
+                    $("img#nameresult").attr("src", "/images/res-cross.gif");
+                    update_message("An unknown error occurred");
+                }
+            }
+        });
+    });
+    function update_message(str) {
+        if (str.length == 0) {
+            // Remove the message
+            if ($("p#json").length > 0) {
+                $("p#json").remove();
+            }
+        } else {
+            if ($("p#json").length > 0) {
+                $("p#json").html(str);
+            } else {
+                jsonlocn.after("<p id='json' class='info'>" + str + "</p>");
+            }
+        }
+    }
+});
+</script>

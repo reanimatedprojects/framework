@@ -28,6 +28,7 @@ use RPG::Utils;
 use RPG::Base;
 use URI::Escape;
 use Dancer::Plugin::Ajax;
+use JSON qw();
 
 use strict;
 use warnings;
@@ -55,7 +56,7 @@ get '/character/search/:character_name' => sub {
     $vars->{ character_name } = trim_space( params->{ character_name } );
 
     if (length($vars->{ character_name }) < 3) {
-        $vars->{ message } = message( "CHARACTER_NAME_TOOSHORT" ); # MSG
+        $vars->{ message } = "CHARACTER_NAME_TOOSHORT"; # MSG
         return template "character_search" => $vars;
     }
 
@@ -79,32 +80,47 @@ ajax '/character/search' => sub {
     # Need to strip spaces from start/end!
     $vars->{ character_name } = trim_space( params->{ character_name } );
 
-    debug ":$vars->{ character_name }:";
-    if (length($vars->{ character_name }) < 3) {
-        $vars->{ status } = "error";
-        $vars->{ message } = message( "CHARACTER_NAME_TOOSHORT" ); # MSG
-        return template "character_search_xml" => $vars;
-    }
+    $vars->{ json }{ character_name } = $vars->{ character_name };
 
-    # Exact match for the name?
-    my $characters = schema->resultset("Character")->search({
-        name => $vars->{ character_name }
-    });
-    # If there's an exact match, return the character data
-    if ($characters->count() == 1) {
-        $vars->{ character } = $characters->first();
+    if (length($vars->{ json }{ character_name }) < 3) {
         $vars->{ status } = "error";
-        $vars->{ message } = message( "CHARACTER_NAME_EXISTS" );
+        $vars->{ json }{ error } = "CHARACTER_NAME_TOOSHORT"; # MSG
+        $vars->{ json }{ exists } = 0;
     } else {
-        $vars->{ status } = "ok";
-        $vars->{ message } = message( "CHARACTER_NAME_OK" );
+        # Exact match for the name?
+        my $characters = schema->resultset("Character")->search({
+            name => $vars->{ json }{ character_name }
+        });
+        # If there's an exact match, return the character data
+        if ($characters->count() == 1) {
+            # Replace the name with the actual one from the db
+            $vars->{ json }{ character_name } = $characters->first->name();
+            $vars->{ json }{ error } = "CHARACTER_NAME_EXISTS"; # MSG
+            $vars->{ json }{ exists } = 1;
+        } else {
+            $vars->{ json }{ exists } = 0;
+        }
     }
-    template "character_search_xml" => $vars;
+    # It's ok (1) if exists == 0 and error is false ("" or undef)
+    $vars->{ json }{ ok } = (($vars->{ json }{ exists } == 1) ||
+        $vars->{ json }{ error }) ? 0 : 1;
+
+    my $json = JSON->new->allow_nonref;
+    eval {
+        $vars->{ content } = $json->encode($vars->{ json });
+    };
+    debug $@ if $@;
+
+    return template "character_search_json" => $vars;
 };
 
 # Display character profiles
 get '/character/:character_id' => sub {
     my $vars = { };
+
+    # Special case for /character/create and /character/search
+    # Perhaps just check for /character/\d+ ?
+    return pass if (params->{ character_id } =~ /^(create|search|search\/.*)$/);
 
     $vars->{ character_id } = trim_space( params->{ character_id } );
     $vars->{ character } = schema->resultset("Character")->find({
