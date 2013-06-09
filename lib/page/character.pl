@@ -26,15 +26,87 @@
 
 use RPG::Utils;
 use RPG::Base;
+use URI::Escape;
+use Dancer::Plugin::Ajax;
 
 use strict;
 use warnings;
 
-# Local account creation
+# Redirect to character search
 get '/character' => sub {
+    return redirect "/character/search";
+};
+
+# Search characters by name
+any ['get','post'] => '/character/search' => sub {
+    my $vars = { };
+    $vars->{ character_name } = trim_space( param "character_name" );
+    if ($vars->{ character_name }) {
+        my $uri_name = uri_escape($vars->{ character_name });
+        return redirect "/character/search/" . $uri_name;
+    }
+    template "character_search" => $vars;
+};
+
+get '/character/search/:character_name' => sub {
     my $vars = { };
 
-    $vars->{ character_id } = param("id");
+    # Need to strip spaces from start/end!
+    $vars->{ character_name } = trim_space( params->{ character_name } );
+
+    if (length($vars->{ character_name }) < 3) {
+        $vars->{ message } = message( "CHARACTER_NAME_TOOSHORT" ); # MSG
+        return template "character_search" => $vars;
+    }
+
+    my @characters = schema->resultset("Character")->search({
+        name => { like => "%" . $vars->{ character_name } . "%" }
+    })->all();
+
+    # If it's an exact match (case insensitive), redirect to the profile
+    if ((scalar(@characters) == 1) &&
+        (lc($characters[0]->name()) eq lc($vars->{ character_name }))) {
+        return redirect "/character/" . $characters[0]->id();
+    }
+
+    $vars->{ characters } = \@characters;
+    template "character_search" => $vars;
+};
+
+ajax '/character/search' => sub {
+    my $vars = { };
+
+    # Need to strip spaces from start/end!
+    $vars->{ character_name } = trim_space( params->{ character_name } );
+
+    debug ":$vars->{ character_name }:";
+    if (length($vars->{ character_name }) < 3) {
+        $vars->{ status } = "error";
+        $vars->{ message } = message( "CHARACTER_NAME_TOOSHORT" ); # MSG
+        return template "character_search_xml" => $vars;
+    }
+
+    # Exact match for the name?
+    my $characters = schema->resultset("Character")->search({
+        name => $vars->{ character_name }
+    });
+    # If there's an exact match, return the character data
+    if ($characters->count() == 1) {
+        $vars->{ character } = $characters->first();
+        $vars->{ status } = "error";
+        $vars->{ message } = message( "CHARACTER_NAME_EXISTS" );
+    } else {
+        $vars->{ status } = "ok";
+        $vars->{ message } = message( "CHARACTER_NAME_OK" );
+    }
+    template "character_search_xml" => $vars;
+};
+
+# Display character profiles
+get '/character/:character_id' => sub {
+    my $vars = { };
+
+    $vars->{ character_id } = trim_space( params->{ character_id } );
     $vars->{ character } = schema->resultset("Character")->find({
         character_id => $vars->{ character_id },
     });
@@ -44,6 +116,7 @@ get '/character' => sub {
     template "character" => $vars;
 };
 
+# Character creation
 get '/character/create' => sub {
     my $vars = { };
 

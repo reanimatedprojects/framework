@@ -9,3 +9,5 @@
 [% ELSE %]
 <p>Character not found.</p>
 [% END %]
+
+<p><a href="/character/search">Search</a></p>

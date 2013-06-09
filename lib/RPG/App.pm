@@ -205,4 +205,19 @@ sub message {
     return RPG::Messages->message(@_);
 }
 
+=head2 trim_space( string )
+
+Returns the string but with any leading or trailing spaces removed.
+
+=cut
+
+sub trim_space {
+    my $string = shift;
+    if (! defined $string) {
+        return $string;
+    }
+    $string =~ s/(^ +| +$)//g;
+    return $string;
+}
+
 true;

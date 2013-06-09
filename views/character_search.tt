@@ -1,0 +1,22 @@
+<h1>Search for a character</h1>
+
+<form action="/character/search" method="POST">
+Name: <input type="text" name="character_name" id="character_name" size="20">
+<input type="submit" value="Search">
+</form>
+
+[% IF message; "<p>Message: " _ message _ "</p>"; END %]
+
+[% IF character_name %]<p>Searching for <b>[% character_name %]</b></p>[% END %]
+
+[% RETURN UNLESS character_name %]
+[% IF characters AND characters.size > 0;
+    "<p>";
+    FOREACH char IN characters;
+        char.id; " - "; char.profile_link(); "<br>";
+    END;
+    "</p>";
+ELSIF characters;
+    "<p>No results found.</p>";
+END %]
+

@@ -111,6 +111,22 @@ sub new {
     return $new;
 }
 
+=head2 profile_link()
+
+Generate a profile link as basic HTML - if you ever change the route
+in lib/page/character.pl you will need to adjust the URL this method
+produces.
+
+FIXME: We probably need to HTML encode the character name in case someone
+allows & < or > in character names.
+
+=cut
+
+sub profile_link {
+    my $self = shift;
+    return '<a href="/character/' . $self->character_id() . '">' . $self->name() . '</a>';
+}
+
 1;
 
 =head1 AUTHOR
