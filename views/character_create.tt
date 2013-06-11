@@ -8,13 +8,19 @@
 $(document).ready(function(){
     var previous_name = "";
     var search_xhr;
-    var jsonlocn = $("img#nameresult").parent();
+    // Tick/Cross image
+    var img_nameresult = $("img#nameresult");
+    var jsonlocn = img_nameresult.parent();
+    // Submit button
+    var input_character_create = $("input#character_create");
+    // Character name field
+    var input_character_name = $("input#character_name");
 
     // This won't catch anything like pasting a character name!
-    $("input#character_name").keyup(function() {
-        var tryname = $("input#character_name").val();
-        if (previous_name != $("input#character_name").val()) {
-            previous_name = $("input#character_name").val();
+    input_character_name.keyup(function() {
+        var tryname = input_character_name.val();
+        if (previous_name != input_character_name.val()) {
+            previous_name = input_character_name.val();
         } else {
             // Don't keep checking the name unless it's actually changed
             return;
@@ -23,8 +29,8 @@ $(document).ready(function(){
         // 64 (size of characters.name in db)
         if ((tryname.length < 3) || (tryname.length > 64)) {
             // Taken result (/images/res-cross.gif)
-            $("img#nameresult").attr("src", "/images/res-cross.gif");
-            $("input#character_create").attr("disabled", "true");
+            img_nameresult.attr("src", "/images/res-cross.gif");
+            input_character_create.attr("disabled", "true");
             if (tryname.length < 3) {
                 update_message("Sorry, try something a bit longer (3 or more characters)");
             } else if (tryname.length > 64) {
@@ -39,29 +45,29 @@ $(document).ready(function(){
         search_xhr = $.ajax({
             url: "/character/search",
             dataType: "json",
-            data: {"character_name":$("input#character_name").val()},
+            data: {"character_name": input_character_name.val()},
             success: function(data) {
                 if (data === null) {
                     // Aborted, don't change anything.
                 } else if (data.error && data.error.length > 0) {
 // Invalid name result (/images/res-cross.gif)
-                    $("img#nameresult").attr("src", "/images/res-cross.gif");
-                    $("input#character_create").attr("disabled", "true");
+                    img_nameresult.attr("src", "/images/res-cross.gif");
+                    input_character_create.attr("disabled", "true");
                     update_message(data.error);
                 } else if (data.exists && data.exists == 1) {
 // Taken result (/images/res-cross.gif)
-                    $("img#nameresult").attr("src","/images/res-cross.gif");
-                    $("input#character_create").attr("disabled", "true");
+                    img_nameresult.attr("src","/images/res-cross.gif");
+                    input_character_create.attr("disabled", "true");
                     update_message("That name is already taken.");
                 } else if (data.ok && data.ok == 1) {
 // OK means the name is available to use
-                    $("img#nameresult").attr("src","/images/res-tick.gif");
-                    $("input#character_create").removeAttr("disabled");
+                    img_nameresult.attr("src","/images/res-tick.gif");
+                    input_character_create.removeAttr("disabled");
                     update_message("That name is available to use.");
                 } else {
 // Unknown result (/images/res-cross.gif)
-                    $("img#nameresult").attr("src", "/images/res-cross.gif");
-                    $("input#character_create").attr("disabled", "true");
+                    img_nameresult.attr("src", "/images/res-cross.gif");
+                    input_character_create.attr("disabled", "true");
                     update_message("An unknown error occurred");
                 }
             }
@@ -69,12 +75,12 @@ $(document).ready(function(){
     });
 
     // Changing the field using copy/paste triggers a name check
-    $("input#character_name").change(function() {
-        $("input#character_name").keyup();
+    input_character_name.change(function() {
+        input_character_name.keyup();
     });
 
     // Trigger a check on load in case there's content in the input field
-    $("input#character_name").keyup();
+    input_character_name.keyup();
 
     function update_message(str) {
         if (str.length == 0) {
