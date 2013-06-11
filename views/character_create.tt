@@ -1,12 +1,13 @@
 <h1>Create a character</h1>
 
 <form action="/character/create" method="POST">
-<p>Name: <input type="text" name="character_name" id="character_name" size="20"> <img style='vertical-align:middle' id="nameresult" src="/images/res-cross.gif"> <input type="submit" value="Create"></p>
+<p>Name: <input type="text" name="character_name" id="character_name" size="20" maxlength="64"> <img style='vertical-align:middle' id="nameresult" src="/images/res-cross.gif"> <input type="submit" value="Create" id="character_create"></p>
 </form>
 
 <script type="text/javascript">
 $(document).ready(function(){
     var previous_name = "";
+    var search_xhr;
     var jsonlocn = $("img#nameresult").parent();
 
     // This won't catch anything like pasting a character name!
@@ -23,6 +24,7 @@ $(document).ready(function(){
         if ((tryname.length < 3) || (tryname.length > 64)) {
             // Taken result (/images/res-cross.gif)
             $("img#nameresult").attr("src", "/images/res-cross.gif");
+            $("input#character_create").attr("disabled", "true");
             if (tryname.length < 3) {
                 update_message("Sorry, try something a bit longer (3 or more characters)");
             } else if (tryname.length > 64) {
@@ -30,31 +32,50 @@ $(document).ready(function(){
             }
             return;
         }
-        $.ajax({
+        // If we're already doing a search, abort it before starting the next
+        if (search_xhr) {
+            search_xhr.abort();
+        }
+        search_xhr = $.ajax({
             url: "/character/search",
             dataType: "json",
             data: {"character_name":$("input#character_name").val()},
             success: function(data) {
-                if (data.error && data.error.length > 0) {
+                if (data === null) {
+                    // Aborted, don't change anything.
+                } else if (data.error && data.error.length > 0) {
 // Invalid name result (/images/res-cross.gif)
                     $("img#nameresult").attr("src", "/images/res-cross.gif");
+                    $("input#character_create").attr("disabled", "true");
                     update_message(data.error);
                 } else if (data.exists && data.exists == 1) {
 // Taken result (/images/res-cross.gif)
                     $("img#nameresult").attr("src","/images/res-cross.gif");
+                    $("input#character_create").attr("disabled", "true");
                     update_message("That name is already taken.");
                 } else if (data.ok && data.ok == 1) {
 // OK means the name is available to use
                     $("img#nameresult").attr("src","/images/res-tick.gif");
+                    $("input#character_create").removeAttr("disabled");
                     update_message("That name is available to use.");
                 } else {
 // Unknown result (/images/res-cross.gif)
                     $("img#nameresult").attr("src", "/images/res-cross.gif");
+                    $("input#character_create").attr("disabled", "true");
                     update_message("An unknown error occurred");
                 }
             }
         });
     });
+
+    // Changing the field using copy/paste triggers a name check
+    $("input#character_name").change(function() {
+        $("input#character_name").keyup();
+    });
+
+    // Trigger a check on load in case there's content in the input field
+    $("input#character_name").keyup();
+
     function update_message(str) {
         if (str.length == 0) {
             // Remove the message
