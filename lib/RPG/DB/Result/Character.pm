@@ -40,6 +40,7 @@ allows us to select all characters for the logged in account.
 
 use base qw/DBIx::Class::Core RPG::DB::Base/;
 
+use RPG::Utils;
 use Dancer ':syntax';
 
 use strict;
@@ -94,21 +95,26 @@ provided is a valid syntax.
 
 =cut
 
-sub new {
-    my ( $class, $attrs ) = @_;
+sub insert {
+    my $self = shift;
 
-    # FIXME: Check the name is acceptable
-    # FIXME: Check what to return if it's not - what does DBIx::Class do?
-    # FIXME: 5-64 alphanumeric characters
-    #
-    return unless ($attrs->{ name } &&
-        $attrs->{ name } =~ /^[a-z0-9A-Z]{5,64}$/);
+    # FIXME: Check what to return if it's not ok - what does DBIx::Class do?
 
-    $attrs->{ disabled } //= "";
-    $attrs->{ xp } //= 0;
+    # invalid_name returns a hashref { status => "ok" } or
+    # { status => "error" } so the if () will always evaluate
+    # as true! Need to find a better way of doing this, perhaps a
+    # helper method called invalid_name_boolean which simply returns
+    # 1 or 0 based on the status result from the main method?
+    my $invalid_result = RPG::Utils->invalid_name($self->name);
+    if ($invalid_result->{ status } ne "ok") {
+        die $self;
+    }
+    # We could use //= if we could be sure it was always on Perl 5.10
+    # or higher but CentOS 5 only uses Perl 5.8 still
+    $self->disabled("") unless defined $self->disabled();
+    $self->xp(0) unless defined $self->xp();
 
-    my $new = $class->next::method($attrs);
-    return $new;
+    $self->next::method(@_);
 }
 
 =head2 profile_link()

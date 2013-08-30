@@ -1,0 +1,4 @@
+[% IF message %]
+<h2 class="message_[% message.status %]">[% message.message OR message.error %]</h2>
+[% USE Dumper; Dumper.dump_html(message) %]
+[% END %]

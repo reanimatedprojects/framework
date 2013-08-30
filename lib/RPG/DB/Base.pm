@@ -70,6 +70,11 @@ sub error_response {
     return RPG::Base->error_response(@_);
 }
 
+sub schema {
+    my $self = shift;
+    return $self->result_source->schema();
+}
+
 1;
 
 =head1 SEE ALSO

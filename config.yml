@@ -58,3 +58,8 @@ auths:
     name: "Local account"
     module: "RPG::Auth::Local"
     table: "AccountAuthLocal"
+
+# Assorted configuration variables, defaults are probably ok
+minimum_character_name: 5
+# Make this bigger and you have to adjust the database column
+maximum_character_name: 64

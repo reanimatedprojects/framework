@@ -1,7 +1,8 @@
+[% PROCESS "inc/message" %]
 <h1>Create a character</h1>
 
 <form action="/character/create" method="POST">
-<p>Name: <input type="text" name="character_name" id="character_name" size="20" maxlength="64"> <img style='vertical-align:middle' id="nameresult" src="/images/res-cross.gif"> <input type="submit" value="Create" id="character_create"></p>
+<p>Name: <input type="text" name="character_name" id="character_name" size="20" maxlength="[% settings.maximum_character_name %]"> <img style='vertical-align:middle' id="nameresult" src="/images/res-cross.gif"> <input type="submit" value="Create" id="character_create"></p>
 </form>
 
 <script type="text/javascript">
@@ -25,16 +26,16 @@ $(document).ready(function(){
             // Don't keep checking the name unless it's actually changed
             return;
         }
-        // Can't be less than 3 characters or more than
-        // 64 (size of characters.name in db)
-        if ((tryname.length < 3) || (tryname.length > 64)) {
+        // Can't be less than [% settings.minimum_character_name %] characters or more than
+        // [% settings.maximum_character_name %] (size of characters.name in db)
+        if ((tryname.length < [% settings.minimum_character_name %]) || (tryname.length > [% settings.maximum_character_name %])) {
             // Taken result (/images/res-cross.gif)
             img_nameresult.attr("src", "/images/res-cross.gif");
             input_character_create.attr("disabled", "true");
-            if (tryname.length < 3) {
-                update_message("Sorry, try something a bit longer (3 or more characters)");
-            } else if (tryname.length > 64) {
-                update_message("Sorry, try something a bit shorter (up to 64 characters)");
+            if (tryname.length < [% settings.minimum_character_name %]) {
+                update_message("Sorry, try something a bit longer ([% settings.minimum_character_name %] or more characters)");
+            } else if (tryname.length > [% settings.maximum_character_name %]) {
+                update_message("Sorry, try something a bit shorter (up to [% settings.maximum_character_name %] characters)");
             }
             return;
         }
@@ -81,6 +82,8 @@ $(document).ready(function(){
 
     // Trigger a check on load in case there's content in the input field
     input_character_name.keyup();
+    // and then disable the create button with the default content
+    input_character_create.attr("disabled", "true");
 
     function update_message(str) {
         if (str.length == 0) {

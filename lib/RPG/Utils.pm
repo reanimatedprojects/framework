@@ -23,6 +23,8 @@ package RPG::Utils;
 
 use base "RPG::Base";
 
+use Dancer ':syntax';
+
 use Digest::SHA;
 use URI::Escape qw();
 use Mail::RFC822::Address qw();
@@ -43,7 +45,7 @@ The following methods are provided:
 
 =head2 $username_ok = RPG::Utils->is_valid_username( $username );
 
-Verify the username provided is 1-10 characters long and contains a-z,0-9
+Verify the username provided is 5-15 characters long and contains a-z,0-9
 
 Return value is a hashref. Check ->{ status } for either "ok" or "error"
 If there is an error, ->{ error } will contain the error code
@@ -183,6 +185,89 @@ sub uri_escape {
     return URI::Escape::uri_escape(@_);
 }
 
+=head2 trim_space( string )
+
+Returns the string but with any leading or trailing spaces removed.
+
+=cut
+
+sub trim_space {
+    my $string = shift;
+    return undef unless (defined $string);
+    $string =~ s/(^ +| +$)//g;
+    return $string;
+}
+
+=head2 invalid_name()
+
+Return whether a name is acceptable or not. This is where we
+perform checks for HTML entities (as mentioned in the profile_link
+FIXME), for assorted offensive names or special characters.
+
+FIXME: There are a number of places where we have hardcoded
+limits of between config->{ minimum_character_name } and
+config->{ maximum_character_name } characters for names. If
+this is changed, need to adjust the numbers in this method and
+also database column definitions and some HTML form fields.
+
+=cut
+
+sub invalid_name {
+    my $self = shift;
+    my $name = shift || return $self->error_response(
+        "CHARACTER_NAME_INVALID", # MSG
+    );
+
+    $name = trim_space($name);
+    $name =~ s/\s+/ /g;
+
+    # Specific words are not allowed
+    if (grep { $name =~ m/$_/i } (
+            'admin', 'moderator', 'monitor', ' and ',
+            '^[0-9 \.]+$', '^a ', '^an ', '^\.',
+        )) {
+        return $self->error_response(
+            "CHARACTER_NAME_INVALID", # MSG
+        );
+    }
+
+    # Outside the normal range of characters. You may wish to relax
+    # this if you use UTF8 or UTF16 and require non-ASCII characters
+    # such as those with accents.
+    my $min = config->{ minimum_character_name };
+    my $max = config->{ maximum_character_name };
+    if ($name !~ /^[a-z0-9\.\-' ]{$min,$max}$/i) {
+        if ($name =~ /[\x7f-\xff]/) {
+            return $self->error_response(
+                "CHARACTER_NAME_INVALID", # MSG
+            );
+        } elsif (length($name) < config->{ minimum_character_name }) {
+            return $self->error_response(
+                "CHARACTER_NAME_TOOSHORT", # MSG
+                minimum => config->{ minimum_character_name },
+            );
+        } elsif (length($name) > config->{ maximum_character_name }) {
+            return $self->error_response(
+                "CHARACTER_NAME_TOOLONG", # MSG
+                maximum => config->{ maximum_character_name },
+            );
+        }
+        return $self->error_response(
+            "CHARACTER_NAME_INVALID", # MSG
+        );
+    }
+
+    # Too many separate words are not allowed
+    # This prevents 's i m o n' but allows 'Baron Manfred von Richthofen'
+    my @spaces = split(/ /, $name);
+    if (scalar(@spaces) > 4) {
+        return $self->error_response(
+            "CHARACTER_NAME_WORDS", # MSG Too many words
+        );
+    }
+
+    return $self->ok_response();
+}
 
 1;
 
