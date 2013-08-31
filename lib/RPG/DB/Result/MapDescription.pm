@@ -23,13 +23,15 @@ package RPG::DB::Result::MapDescription;
 
 =head1 NAME
 
-RPG::DB::Result::Map - Database module for map
+RPG::DB::Result::MapDescription - Database module for map descriptions
 
 =head1 DESCRIPTION
 
-This object represents a map tile - including the name, map id
-and various other map specific parameters that will be added
-as required.
+This object represents a map tile's description - since this
+could require a large amount of storage but is typically only
+needed for the tile the character is currently on, this is
+being put in a separate table with a method to fetch it from
+the map object.
 
 =head1 METHODS
 
