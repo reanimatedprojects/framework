@@ -1,3 +1,25 @@
+RPGWNN - Framework for browser based RPG game
+Copyright (C) 2013  Reanimated Projects and Games Ltd
+
+This file is part of RPGWNN
+
+RPGWNN is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+RPGWNN is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+Contact information for Reanimated Projects and Games Ltd
+can be found at http://rpgwnn.com/
+------------------------------------------------------------------------
+
 Installing the RPGWNN framework and prerequisites
 =================================================
 
@@ -22,7 +44,7 @@ MySQL (or another database supported by Dancer)
 RPGWNN requires a few Perl modules to be installed in addition to
 the core modules that come with any modern Perl installation.
 
-We've tried to keep it to a minimum by using the Dancer micro 
+We've tried to keep it to a minimum by using the Dancer micro
 web application framework which itself has very few requirements.
 
 PSGI is an interface between Perl web applications and web servers,
@@ -37,7 +59,7 @@ Automatic installation of prerequisites
 ---------------------------------------
 
 The "quick" method is to install the RPGWNN Bundle found in this
-distribution. The only downside is that it may unneccessarily 
+distribution. The only downside is that it may unneccessarily
 upgrade modules that you may already have installed on your system.
 
   cd lib && perl -MCPAN -e 'install Bundle::RPGWNN'
@@ -93,4 +115,3 @@ This step _WILL_ destroy any tables that have already been created.
 
  perl scripts/deploy_db_schema.pl
 
-------------------------------------------------------------------------
