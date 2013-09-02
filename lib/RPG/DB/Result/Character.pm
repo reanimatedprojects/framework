@@ -76,6 +76,28 @@ __PACKAGE__->add_columns(
         size                => 10,
         is_nullable         => 0,
     },
+    # The following have to be duplicates of the x,y,z,world
+    # columns in the maps table
+    x => {
+        data_type           => "integer",
+        size                => 11,
+        is_nullable         => 0,
+    },
+    y => {
+        data_type           => "integer",
+        size                => 11,
+        is_nullable         => 0,
+    },
+    z => {
+        data_type           => "integer",
+        size                => 11,
+        is_nullable         => 0,
+    },
+    world => {
+        data_type           => "integer",
+        size                => 11,
+        is_nullable         => 0,
+    },
 );
 __PACKAGE__->set_primary_key('character_id');
 __PACKAGE__->add_unique_constraint("name" => [qw/name/]);
@@ -83,9 +105,16 @@ __PACKAGE__->belongs_to(
     account => 'RPG::DB::Result::Account',
     'account_id'
 );
+# Descriptions are optional and stored in a separate table
 __PACKAGE__->might_have(
     description => 'RPG::DB::Result::CharacterDescription',
     'character_id'
+);
+# one-to-one relationship for character -> map tile
+__PACKAGE__->has_one(
+    location => 'RPG::DB::Result::Map',
+    { 'foreign.x' => 'self.x', 'foreign.y' => 'self.y',
+        'foreign.z' => 'self.z', 'foreign.world' => 'self.world' }
 );
 
 =head2 new()

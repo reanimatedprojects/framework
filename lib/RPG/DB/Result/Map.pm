@@ -51,6 +51,8 @@ __PACKAGE__->add_columns(
         is_auto_increment   => 1,
         extra               => { unsigned => 1 },
     },
+    # The following have to match the x,y,z,world columns
+    # in the characters table
     x => {
         data_type           => "integer",
         size                => 11,
