@@ -1,0 +1,45 @@
+RPGWNN - Framework for browser based RPG game
+Copyright (C) 2013 Reanimated Projects and Games Ltd
+
+This file is part of RPGWNN
+
+RPGWNN is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+RPGWNN is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+Contact information for Reanimated Projects and Games Ltd
+can be found at http://rpgwnn.com/
+------------------------------------------------------------------------
+
+To run any of the tests in the 't' directory, use:
+
+$ prove -l t/001_base.t
+
+This should run all the tests in that file and display something like:
+
+t/001_base.t .. ok   
+All tests successful.
+Files=1, Tests=1,  0 wallclock secs ( 0.03 usr  0.01 sys +  0.22 cusr  0.02 csys =  0.28 CPU)
+Result: PASS
+
+To run all tests, omit the filename parameter and it will run t/*.t
+
+$ prove -l
+
+t/001_base.t ................ ok   
+t/002_index_route.t ......... ok   
+t/003_db_accounts.t ......... ok   
+t/004_character_location.t .. ok   
+All tests successful.
+Files=4, Tests=8,  2 wallclock secs ( 0.04 usr  0.02 sys +  1.85 cusr  0.20 csys =  2.11 CPU)
+Result: PASS
+
