@@ -91,6 +91,28 @@ __PACKAGE__->might_have(
     'map_id'
 );
 
+=head2 fetch_map_area({ min_x => -dx, max_x => dx, min_y => -dy, max_y => dy })
+
+parameters passed are min_x, max_x, min_y and max_y but they are relative and
+added to the current x,y values of the location
+
+e.g min_x => -2, max_x => 2, min_y => -2, max_y => 2
+
+=cut
+
+sub fetch_map_area {
+    my $self = shift;
+    my $args = ref $_[0] eq 'HASH' ? shift : { @_ };
+
+    return $self->schema->resultset("Map")->fetch_map_area({
+        min_x => $self->x + $args->{ min_x },
+        max_x => $self->x + $args->{ max_x },
+        min_y => $self->y + $args->{ min_y },
+        max_y => $self->y + $args->{ max_y },
+        z => $self->z, world => $self->world,
+    });
+}
+
 1;
 
 =head1 AUTHOR
