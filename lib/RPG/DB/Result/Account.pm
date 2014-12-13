@@ -93,7 +93,7 @@ sub new {
     return unless ($attrs->{ email } &&
         $attrs->{ email } =~ /\@/);
 
-    # Set the default number of characters allowed. This is used rather
+    # Set the default number of characters allowed. This is used rather
     # than setting a default_value in the add_columns definition because
     # that would require re-fetching the row after inserting it.
     $attrs->{ max_characters } = 3
