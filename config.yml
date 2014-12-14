@@ -43,7 +43,7 @@ plugins:
       schema_class: RPG::DB
       dsn: dbi:mysql:rpg_db
       user: rpg_user
-      pass: rpg_pass
+      password: rpg_pass
       options:
         RaiseError: 1
         PrintError: 1
