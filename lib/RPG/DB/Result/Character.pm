@@ -82,21 +82,25 @@ __PACKAGE__->add_columns(
         data_type           => "integer",
         size                => 11,
         is_nullable         => 0,
+        default_value       => 0,
     },
     y => {
         data_type           => "integer",
         size                => 11,
         is_nullable         => 0,
+        default_value       => 0,
     },
     z => {
         data_type           => "integer",
         size                => 11,
         is_nullable         => 0,
+        default_value       => 0,
     },
     world => {
         data_type           => "integer",
         size                => 11,
         is_nullable         => 0,
+        default_value       => 0,
     },
 );
 __PACKAGE__->set_primary_key('character_id');
@@ -114,7 +118,8 @@ __PACKAGE__->might_have(
 __PACKAGE__->has_one(
     location => 'RPG::DB::Result::Map',
     { 'foreign.x' => 'self.x', 'foreign.y' => 'self.y',
-        'foreign.z' => 'self.z', 'foreign.world' => 'self.world' }
+        'foreign.z' => 'self.z', 'foreign.world' => 'self.world' },
+    { cascade_delete => 0 },
 );
 
 =head2 new()
@@ -139,7 +144,7 @@ sub insert {
         die $self;
     }
     # We could use //= if we could be sure it was always on Perl 5.10
-    # or higher but CentOS 5 only uses Perl 5.8 still
+    # or higher but CentOS 5 only uses Perl 5.8 still
     $self->disabled("") unless defined $self->disabled();
     $self->xp(0) unless defined $self->xp();
 

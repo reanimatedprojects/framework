@@ -1,4 +1,4 @@
-use Test::More tests => 8;
+use Test::More tests => 9;
 use strict;
 use warnings;
 
@@ -12,13 +12,46 @@ use Dancer qw(:syntax :script :tests);
 use Dancer::Test;
 use Dancer::Plugin::DBIC qw(schema);
 
-# Get an account (and hope it exists)
-my $account = schema->resultset('Account')->find(2);
+# Get an account or create one
+my $account = schema->resultset('Account')->find_or_create({
+    email => 'dummy@example.com'
+});
+ok($account, "account found or created");
 ok($account->account_id(), "account fetched");
 
-# Get the first character (if there is one)
+my $tile = schema->resultset('Tile')->find({ name => "water" });
+unless ($tile) {
+    print "No tile, creating\n";
+    $tile = schema->create({
+        name => "water", description => "Pond", background_image => "water.png", background_colour => "#3333cc"
+    });
+}
+
+my $map = schema->resultset('Map')->find({
+    x => 0, y => 0, z => 0, world => 0
+});
+unless ($map) {
+    print "No map, creating\n";
+    $map = schema->resultset('Map')->create({
+        x => 0, y => 0, z => 0, world => 0
+    });
+}
+
+# Get the first character (if there is one), or create one
 my @characters = $account->characters();
-my $character = shift @characters;
+my $character;
+if (scalar(@characters) == 0) {
+    print "No characters, creating\n";
+    $character = $account->create_related('characters', {
+        name => "Dummy",
+        xp => 0,
+        disabled => "",
+        x => $map->x, y => $map->y,
+        z => $map->z, world => $map->world,
+    });
+} else {
+    $character = shift @characters;
+}
 ok($character->character_id(), "character fetched");
 
 my $location = $character->location();
@@ -56,6 +89,5 @@ for (my $col = 0; $col <= ($map_size->{ max_x } - $map_size->{ min_x }); $col++)
     }
 }
 
-my $x = <STDIN>;
 print Dumper($results);
 

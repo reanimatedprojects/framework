@@ -57,21 +57,25 @@ __PACKAGE__->add_columns(
         data_type           => "integer",
         size                => 11,
         is_nullable         => 0,
+        default_value       => 0,
     },
     y => {
         data_type           => "integer",
         size                => 11,
         is_nullable         => 0,
+        default_value       => 0,
     },
     z => {
         data_type           => "integer",
         size                => 11,
         is_nullable         => 0,
+        default_value       => 0,
     },
     world => {
         data_type           => "integer",
         size                => 11,
         is_nullable         => 0,
+        default_value       => 0,
     },
     tile_id => {
         data_type           => "integer",
@@ -90,6 +94,15 @@ __PACKAGE__->might_have(
     description => 'RPG::DB::Result::MapDescription',
     'map_id'
 );
+__PACKAGE__->has_one(
+    tile => 'RPG::DB::Result::Tile',
+    'tile_id'
+);
+
+sub sqlt_deploy_hook {
+    my ($self, $sqlt_table) = @_;
+    $sqlt_table->add_index(name => 'xyzw_idx', fields =>  ['x', 'y', 'z', 'world']);
+}
 
 =head2 fetch_map_area({ min_x => -dx, max_x => dx, min_y => -dy, max_y => dy })
 
