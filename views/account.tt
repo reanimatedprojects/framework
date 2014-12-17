@@ -20,6 +20,10 @@
 <tr>
     <td>[% character.character_id %]</td>
     <td>[% character.name %]</td>
+    <td>
+        [ <a href="/character/[% character.character_id %]">Profile</a> ]
+        [ <a href="/character/login/[% character.character_id %]">Play</a> ]
+    </td>
 </tr>
 [% END %]
 </table>

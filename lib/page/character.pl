@@ -236,4 +236,30 @@ post '/character/create' => sub {
     template "character_create" => $vars;
 };
 
+get '/character/login/:character_id' => sub {
+    my $account = fetch_account();
+    if (! $account) { return; }
+
+    my $character_id = RPG::Utils::trim_space( params->{ character_id } );
+    my $character = schema->resultset("Character")->find({
+        character_id => $character_id,
+    });
+    if ($character) {
+        if ($character->account_id == $account->id) {
+            # Got the character successfully
+            session 'character_id' => $character_id;
+        } else {
+            # Character doesn't belong to logged in account
+            session 'character_id' => undef;
+        }
+    } else {
+        # Character doesn't exist
+        session 'character_id' => undef;
+    }
+
+    # If the character doesn't exist, the game index page should
+    # redirect back to account page
+    return redirect '/game/index';
+};
+
 true;
