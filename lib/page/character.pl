@@ -56,7 +56,7 @@ get '/character/search/:character_name' => sub {
     $vars->{ character_name } = RPG::Utils::trim_space( params->{ character_name } );
 
     if (length($vars->{ character_name }) < config->{ minimum_character_name }) {
-        $vars->{ message } = "CHARACTER_NAME_TOOSHORT"; # MSG
+        $vars->{ message } = "CHARACTER_NAME_TOOSHORT"; # MSG
         return template "character_search" => $vars;
     }
 
@@ -64,7 +64,7 @@ get '/character/search/:character_name' => sub {
         name => { like => "%" . $vars->{ character_name } . "%" }
     })->all();
 
-    # If it's an exact match (case insensitive), redirect to the profile
+    # If it's an exact match (case insensitive), redirect to the profile
     if ((scalar(@characters) == 1) &&
         (lc($characters[0]->name()) eq lc($vars->{ character_name }))) {
         return redirect "/character/" . $characters[0]->id();
@@ -83,18 +83,18 @@ ajax '/character/search' => sub {
     $vars->{ json }{ character_name } = $vars->{ character_name };
 
     if (length($vars->{ json }{ character_name }) < config->{ minimum_character_name }) {
-        $vars->{ json }{ error } = "CHARACTER_NAME_TOOSHORT"; # MSG
+        $vars->{ json }{ error } = "CHARACTER_NAME_TOOSHORT"; # MSG
         $vars->{ json }{ exists } = 0;
     } else {
         # Exact match for the name?
         my $characters = schema->resultset("Character")->search({
             name => $vars->{ json }{ character_name }
         });
-        # If there's an exact match, return the character data
+        # If there's an exact match, return the character data
         if ($characters->count() == 1) {
             # Replace the name with the actual one from the db
             $vars->{ json }{ character_name } = $characters->first->name();
-            $vars->{ json }{ error } = "CHARACTER_NAME_EXISTS"; # MSG
+            $vars->{ json }{ error } = "CHARACTER_NAME_EXISTS"; # MSG
             $vars->{ json }{ exists } = 1;
         } else {
             $vars->{ json }{ exists } = 0;
@@ -102,7 +102,7 @@ ajax '/character/search' => sub {
                 $vars->{ json }{ character_name }
             );
             if ($in_result->{ status } eq "error") {
-                $vars->{ json }{ error } = $in_result->{ error }; # MSG
+                $vars->{ json }{ error } = $in_result->{ error }; # MSG
             }
         }
     }
@@ -123,7 +123,7 @@ get '/character/:character_id' => sub {
     my $vars = { };
 
     # Special case for /character/create and /character/search
-    # Perhaps just check for /character/\d+ ?
+    # Perhaps just check for /character/\d+ ?
     return pass if (params->{ character_id } =~ /^(create|search|search\/.*)$/);
 
     $vars->{ character_id } = RPG::Utils::trim_space( params->{ character_id } );
@@ -190,13 +190,13 @@ post '/character/create' => sub {
     my $characters = schema->resultset("Character")->search({
         name => $vars->{ character_name }
     });
-    # If there's an exact match, return an error
+    # If there's an exact match, return an error
     if ($characters->count() == 1) {
         debug "found a character";
         return redirect "/character/create";
-        # $vars->{ json }{ character_name } = $characters->first->name();
+        # $vars->{ json }{ character_name } = $characters->first->name();
     }
-    # Check name is not a banned name (eg Admin)
+    # Check name is not a banned name (eg Admin)
     # This actually takes place when we try to create the record so
     # we need to check the result
 

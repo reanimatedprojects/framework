@@ -65,7 +65,7 @@ sub args {
     if (@_ && (scalar(@_) == 1) && (ref($_[0]) eq "HASH")) {
         return shift @_;
     }
-    # One arg and just a scalar, return { msg => $arg }
+    # One arg and just a scalar, return { msg => $arg }
     if (@_ && (scalar(@_) == 1) && (! ref($_[0]))) {
         return { msg => shift @_ };
     }

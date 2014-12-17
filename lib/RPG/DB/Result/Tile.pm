@@ -51,8 +51,8 @@ __PACKAGE__->add_columns(
         is_auto_increment   => 1,
         extra               => { unsigned => 1 },
     },
-    # The following have to match the name, description,
-    # background_image and background_colour columns in the
+    # The following have to match the name, description,
+    # background_image and background_colour columns in the
     # tiles table
     name => {
         data_type           => "char",

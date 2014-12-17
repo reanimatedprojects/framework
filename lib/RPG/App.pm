@@ -44,7 +44,7 @@ get '/' => sub {
 
 # Register a new account
 get '/register' => sub {
-    # Blank out the account registration information so
+    # Blank out the account registration information so
     # the user starts again if they visit the /register url
     session "register" => undef;
 
@@ -85,7 +85,7 @@ get '/login' => sub {
     }
     $source ||= "/account";
 
-    # More than one auth method? If so, prompt for login method
+    # More than one auth method? If so, prompt for login method
     my @auth_keys = keys %{config->{ auths }};
     if (scalar(@auth_keys) == 1) {
         my $auth_key = shift @auth_keys;
@@ -135,9 +135,12 @@ require "page/logout.pl";
 # Character profile
 require "page/character.pl";
 
+# Game page
+require "page/game.pl";
+
 # Define any hooks here
 
-# Add Expires and Cache-Control headers to static content (css, images etc)
+# Add Expires and Cache-Control headers to static content (css, images etc)
 # Set it for one day from now.
 hook after_file_render => sub {
     my $response = shift;
@@ -167,7 +170,7 @@ do something like:
 =cut
 
 sub fetch_account {
-    # If this function is passed a true value, the account is optional
+    # If this function is passed a true value, the account is optional
     # and we will simply return undef
     my $args = RPG::Base->args(@_);
 
@@ -178,7 +181,7 @@ sub fetch_account {
             debug 'Redirecting to /login from ' . session('requested_path');
             redirect '/login';
         }
-        # Return an undef value (optional=1 results in no account returned)
+        # Return an undef value (optional=1 results in no account returned)
         return;
     }
 

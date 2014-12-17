@@ -37,7 +37,7 @@ sub fetch_map_area {
 
     my @results_array = ();
 
-    # Fill the array with the right number of undefined elements
+    # Fill the array with the right number of undefined elements
     for (my $x = $args->{ min_x }; $x <= $args->{ max_x }; $x ++ ) {
         for (my $y = $args->{ min_y }; $y <= $args->{ max_y }; $y ++ ) {
             $results_array[$x - $args->{ min_x } ][ $y - $args->{ min_y } ] = undef;

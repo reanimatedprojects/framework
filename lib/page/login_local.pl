@@ -44,7 +44,7 @@ post '/login/local' => sub {
     my $vars = { };
 
 # 1 Check email is ok (rfc2822 format)
-# 2 If it's not,
+# 2 If it's not,
 #   2.1 setup error for invalid email format
 #   2.2 display login page with error
 # 3 else check accounts record exists for the email address given
@@ -205,7 +205,7 @@ post '/login/local/pwrecover' => sub {
             $reset_url .= "?acc=$reset_param/" . RPG::Utils->uri_escape($password_checksum);
             debug "send the pwrecover email - url $reset_url";
 
-            # Temporary way to show it on the page until the email is sent
+            # Temporary way to show it on the page until the email is sent
             $vars->{ reset_url } = $reset_url;
 
             $vars->{ result } = {
@@ -216,7 +216,7 @@ post '/login/local/pwrecover' => sub {
         } else {
             $vars->{ result } = {
                 status => "error",
-                error => ($exception || "ACCOUNT_NOTFOUND"), # MSG
+                error => ($exception || "ACCOUNT_NOTFOUND"), # MSG
             };
         }
 
@@ -255,7 +255,7 @@ any ['get', 'post'] => '/login/local/pwreset' => sub {
         "$acc_id/$time",  PW_RESET_SECRET
     );
 
-    # Search for the account by id
+    # Search for the account by id
     my $account = schema->resultset("Account")->find({
         account_id => $acc_id
     });
@@ -288,14 +288,14 @@ any ['get', 'post'] => '/login/local/pwreset' => sub {
 
         # Go ahead and reset it as the new passwords matched
 
-        # Fetch the local auth object
+        # Fetch the local auth object
         # Update the password field
         my $account_auth_result = $account->fetch_auth_method( auth_type => "local" );
 
         if ($account_auth_result->{ status } eq "ok") {
             my $account_auth = $account_auth_result->{ account_auth };
 
-            # Set the password!
+            # Set the password!
             $account_auth->password( $password1 );
             $account_auth->update();
 
@@ -303,14 +303,14 @@ any ['get', 'post'] => '/login/local/pwreset' => sub {
                 message => "PASSWORD_RESET", # MSG
             );
         } else {
-            # There was an error fetching the auth object
+            # There was an error fetching the auth object
             $vars->{ result } = RPG::Base->error_response(
-                "PASSWORD_RESET_ERROR", # MSG
+                "PASSWORD_RESET_ERROR", # MSG
             );
         }
 
     } else {
-        # Allow the reset as the checksum matched, the account
+        # Allow the reset as the checksum matched, the account
         # was found, and the time is still recent enough
         debug "Allow user to reset the password";
 
@@ -326,7 +326,7 @@ any ['get', 'post'] => '/login/local/pwreset' => sub {
         # Passwords were provided but didn't match, as opposed
         # to not being provided at all during first page load
         if ($password1 && $password2 && ($password1 ne $password2)) {
-            # If we set it as 'error', it would prevent the user
+            # If we set it as 'error', it would prevent the user
             # from retrying the password reset without clicking
             # on the link again
             $vars->{ result } = RPG::Base->error_response(

@@ -76,7 +76,7 @@ __PACKAGE__->add_columns(
         size                => 10,
         is_nullable         => 0,
     },
-    # The following have to be duplicates of the x,y,z,world
+    # The following have to be duplicates of the x,y,z,world
     # columns in the maps table
     x => {
         data_type           => "integer",
@@ -109,7 +109,7 @@ __PACKAGE__->belongs_to(
     account => 'RPG::DB::Result::Account',
     'account_id'
 );
-# Descriptions are optional and stored in a separate table
+# Descriptions are optional and stored in a separate table
 __PACKAGE__->might_have(
     description => 'RPG::DB::Result::CharacterDescription',
     'character_id'

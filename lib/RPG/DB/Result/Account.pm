@@ -148,7 +148,7 @@ sub register_auth_method {
         auth_type => $auth_type,
     });
 
-    # If it failed to create the record, return an error
+    # If it failed to create the record, return an error
     # This might happen if there are some unique keys and we
     # already have a particular auth method registered for an
     # account.
@@ -169,7 +169,7 @@ sub register_auth_method {
     my $schema = $self->result_source->schema;
     my $authresult = $schema->resultset($resultset)->create( $args );
     unless ($authresult) {
-        # If it failed, remove the account_auths record
+        # If it failed, remove the account_auths record
         $account_auth->delete();
         return $self->error_response(
             "ACCOUNT_REGISTERAUTH_FAIL", # MSG

@@ -221,13 +221,13 @@ sub invalid_name {
     $name = trim_space($name);
     $name =~ s/\s+/ /g;
 
-    # Specific words are not allowed
+    # Specific words are not allowed
     if (grep { $name =~ m/$_/i } (
             'admin', 'moderator', 'monitor', ' and ',
             '^[0-9 \.]+$', '^a ', '^an ', '^\.',
         )) {
         return $self->error_response(
-            "CHARACTER_NAME_INVALID", # MSG
+            "CHARACTER_NAME_INVALID", # MSG
         );
     }
 
@@ -257,7 +257,7 @@ sub invalid_name {
         );
     }
 
-    # Too many separate words are not allowed
+    # Too many separate words are not allowed
     # This prevents 's i m o n' but allows 'Baron Manfred von Richthofen'
     my @spaces = split(/ /, $name);
     if (scalar(@spaces) > 4) {
