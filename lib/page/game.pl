@@ -32,10 +32,10 @@ use warnings;
 # Main game page
 get '/game' => sub {
     return redirect "/game/index";
-}
+};
 
 get '/game/index' => sub {
     template "game_index";
-}
+};
 
 true;
