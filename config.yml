@@ -7,7 +7,7 @@ appname: "RPG"
 
 # The default layout to use for your application (located in
 # views/layouts/main.tt)
-layout: "main"
+#layout: "main"
 
 # How to log requests
 logger: "file"
@@ -33,6 +33,7 @@ session_dir: "sessions"
 template: "template_toolkit"
 engines:
   template_toolkit:
+    WRAPPER:    "layouts/main.tt"
     encoding:  'utf8'
     start_tag: '[%'
     end_tag:   '%]'

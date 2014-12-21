@@ -1,0 +1,3 @@
+[%- page.title = "Game"; -%]
+
+<p>This is the main game page.. there will be a map, a description, some exits, inventory, etc.</p>
