@@ -1,3 +1,22 @@
-[%- page.title = "Game"; -%]
+[%- page.title = "Game";
+    page.js_files = [ "/js/game.js" ];
+    # page.css_files = [ "/css/extra.css" ];
+-%]
 
 <p>This is the main game page.. there will be a map, a description, some exits, inventory, etc.</p>
+
+<div id="game_map">
+Map - if this doesn't disappear, you may need to enable JavaScript
+</div>
+
+<div id="game_inventory">
+Inventory - if this doesn't disappear, you may need to enable JavaScript
+</div>
+
+<div id="game_description">
+Description - if this doesn't disappear, you may need to enable JavaScript
+</div>
+
+<div id="game_messages">
+Messages - if this doesn't disappear, you may need to enable JavaScript
+</div>

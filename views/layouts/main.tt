@@ -1,3 +1,4 @@
+[% IF no_wrapper OR template.no_wrapper; content; ELSE -%]
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -13,12 +14,16 @@
     !window.jQuery && document.write('<script type="text/javascript" src="/js/jquery-1.11.2.min.js"><\/script>')
 /* ]]> */</script>
 
+[%- IF page.js_files; FOREACH js IN page.js_files;
+    '<script src="' _ js _ '" type="text/javascript"></script>';
+    END; END %]
 </head>
 <body>
 <div id="page">
 [%  PROCESS "inc/header";
-    content;
+    '<div id="page_content">' _ content _ '</div>';
     PROCESS "inc/footer" -%]
 </div>
 </body>
 </html>
+[%- END -%]

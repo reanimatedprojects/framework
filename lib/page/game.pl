@@ -34,8 +34,90 @@ get '/game' => sub {
     return redirect "/game/index";
 };
 
+## All of these templates will need to validate the currently logged
+## in account and character. They should then be passed a data structure
+## containing character objects and any additional information required
+## for the template. In the event that the logged in character isn't
+## valid (deleted, retired, or just corrupt session data) we should
+## present an error message with a link to reload /game/index and
+## /game/index should handle redirection back to the account page if
+## the account is valid but the character isn't, or back to the login
+## page if the account isn't valid.
+
 get '/game/index' => sub {
-    template "game_index";
+    my $vars = { };
+    $vars->{ character } = fetch_character();
+
+    # Ensure there's a character, if not, redirect back to account page
+    unless ($vars->{ character }) {
+        return redirect "/account";
+    }
+
+
+
+
+
+    template "game_index" => $vars;
+};
+
+# This provides just the map part of the game index page
+get '/game/map' => sub {
+    my $vars = { };
+    $vars->{ character } = fetch_character();
+
+    # Ensure there's a character, if not, redirect back to account page
+    unless ($vars->{ character }) {
+        return redirect "/account";
+    }
+
+
+
+    template "game_map" => $vars;
+};
+
+# This provides just the inventory
+get '/game/inventory' => sub {
+    my $vars = { };
+    $vars->{ character } = fetch_character();
+
+    # Ensure there's a character, if not, redirect back to account page
+    unless ($vars->{ character }) {
+        return redirect "/account";
+    }
+
+
+
+    template "game_inventory" => $vars;
+};
+
+# This provides just the current location description
+get '/game/description' => sub {
+    my $vars = { };
+    $vars->{ character } = fetch_character();
+
+    # Ensure there's a character, if not, redirect back to account page
+    unless ($vars->{ character }) {
+        return redirect "/account";
+    }
+
+
+
+    template "game_description" => $vars;
+};
+
+# This provides just the unseen game messages
+get '/game/messages' => sub {
+    my $vars = { };
+    $vars->{ character } = fetch_character();
+
+    # Ensure there's a character, if not, redirect back to account page
+    unless ($vars->{ character }) {
+        return redirect "/account";
+    }
+
+
+
+    template "game_messages" => $vars;
 };
 
 true;

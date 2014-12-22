@@ -204,6 +204,23 @@ sub fetch_account {
     return $account;
 }
 
+
+sub fetch_character {
+    my $cid;
+    unless ($cid = session('character_id')) {
+        return undef;
+    }
+    my $aid = session('account_id');
+    my $character = schema->resultset("Character")->find({
+        character_id => $cid,
+    });
+    if ($character && $aid && ($character->account_id != $aid)) {
+        debug "got character and account_id but character's account id doesn't match";
+        return undef;
+    }
+    return $character;
+}
+
 sub message {
     return RPG::Messages->message(@_);
 }
