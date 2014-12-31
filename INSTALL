@@ -115,3 +115,19 @@ This step _WILL_ destroy any tables that have already been created.
 
  perl scripts/deploy_db_schema.pl
 
+Next generate a basic map - there must at least be a single map entry
+at 0,0 for character creation to work due to the database foreign key
+constraints. There is a script that will build a basic set of tiles
+and map records.
+
+ perl scripts/create_map.pl
+
+Alternatively, you can run the following two SQL statements to create
+a single tile and map record.
+
+ INSERT INTO tiles SET name='path',description='A stone path.',
+    background_image='bg_path.png',background_colour='#cccccc';
+ INSERT INTO maps SET x=0,y=0,z=0,world=0,tile_id=last_insert_id(),
+    name='path';
+
+
