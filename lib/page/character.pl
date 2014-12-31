@@ -110,6 +110,8 @@ ajax '/character/search' => sub {
     $vars->{ json }{ ok } = (($vars->{ json }{ exists } == 1) ||
         $vars->{ json }{ error }) ? 0 : 1;
 
+    $vars->{ no_wrapper } = 1;
+
     my $json = JSON->new->allow_nonref;
     eval {
         $vars->{ content } = $json->encode($vars->{ json });

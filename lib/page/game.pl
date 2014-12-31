@@ -62,7 +62,7 @@ get '/game/index' => sub {
 
 # This provides just the map part of the game index page
 get '/game/map' => sub {
-    my $vars = { };
+    my $vars = { no_wrapper => 1 };
     $vars->{ character } = fetch_character();
 
     # Ensure there's a character, if not, redirect back to account page
@@ -77,7 +77,7 @@ get '/game/map' => sub {
 
 # This provides just the inventory
 get '/game/inventory' => sub {
-    my $vars = { };
+    my $vars = { no_wrapper => 1 };
     $vars->{ character } = fetch_character();
 
     # Ensure there's a character, if not, redirect back to account page
@@ -92,7 +92,7 @@ get '/game/inventory' => sub {
 
 # This provides just the current location description
 get '/game/description' => sub {
-    my $vars = { };
+    my $vars = { no_wrapper => 1 };
     $vars->{ character } = fetch_character();
 
     # Ensure there's a character, if not, redirect back to account page
@@ -107,7 +107,7 @@ get '/game/description' => sub {
 
 # This provides just the unseen game messages
 get '/game/messages' => sub {
-    my $vars = { };
+    my $vars = { no_wrapper => 1 };
     $vars->{ character } = fetch_character();
 
     # Ensure there's a character, if not, redirect back to account page
