@@ -1,2 +1,19 @@
-[%- META no_wrapper = 1 -%]
 Just the map
+[%- map_data = character.location.fetch_map_area( radius = 2 ) -%]
+
+<table border="1" cellspacing="0" cellpadding="5">
+[% FOREACH row IN [0,1,2,3,4];
+    " <tr>\n";
+    FOREACH col IN [0,1,2,3,4];
+        "  <td>";
+        md = map_data.$col.$row;
+        IF md;
+            md.name _ " at " _ md.x _ "," _ md.y;
+        ELSE;
+            "empty";
+        END;
+        "</td>\n";
+    END;
+    " </tr>\n";
+END %]
+</table>

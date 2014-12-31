@@ -63,12 +63,18 @@ ok($location->world == $character->world, " map/character world match");
 
 isa_ok($location, "RPG::DB::Result::Map");
 
-my $map_size = { min_x => 0, max_x => 0, min_y => -1, max_y => 1, };
-my $results = $location->fetch_map_area({
-    min_x => $map_size->{ min_x }, max_x => $map_size->{ max_x },
-    min_y => $map_size->{ min_y }, max_y => $map_size->{ max_y },
-    z => 0, world => 0
-});
+## Need to convert the following into useful tests to ensure that
+## fetching the map area give the correct values including sizes
+## of arrays returned and actual content.
+
+my $map_size = { min_x => 0, max_x => 1, min_y => -1, max_y => 1, };
+my $results = $location->fetch_map_area( radius => 1 );
+
+print "min_x: $map_size->{ min_x }\n";
+print "max_x: $map_size->{ max_x }\n";
+
+print "min_y: $map_size->{ min_y }\n";
+print "max_y: $map_size->{ max_y }\n";
 
 for (my $col = 0; $col <= ($map_size->{ max_x } - $map_size->{ min_x }); $col++) {
     if (! defined $results->[$col]) {
@@ -76,10 +82,11 @@ for (my $col = 0; $col <= ($map_size->{ max_x } - $map_size->{ min_x }); $col++)
         print "col: $col is undefined.\n";
         next;
     }
-    print "col: $col has ", scalar(@{$results->[$col]}), " rows\n";
+    print "\ncol: $col has ", scalar(@{$results->[$col]}), " rows\n";
 
     for (my $row = 0; $row <= ($map_size->{ max_y } - $map_size->{ min_y }); $row ++) {
 
+        print "x: ", $col + $map_size->{ min_x }, ", y: ", $row + $map_size->{ min_y }, "\n";
         my $cell = $results->[$col][$row];
         if (defined $cell) {
             print " $col, $row : ", join (",", $cell->id, $cell->x, $cell->y, $cell->z, $cell->world), "\n";
@@ -88,6 +95,6 @@ for (my $col = 0; $col <= ($map_size->{ max_x } - $map_size->{ min_x }); $col++)
         }
     }
 }
-
-print Dumper($results);
+print "\n";
+# print Dumper($results);
 

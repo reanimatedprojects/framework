@@ -117,6 +117,13 @@ sub fetch_map_area {
     my $self = shift;
     my $args = ref $_[0] eq 'HASH' ? shift : { @_ };
 
+## radius OR min_x,max_x,min_y,max_y are required
+
+    if (defined $args->{ radius }) {
+        $args->{ max_x } = $args->{ max_y } = $args->{ radius };
+        $args->{ min_x } = $args->{ min_y } = (0 - $args->{ radius });
+    }
+
     return $self->schema->resultset("Map")->fetch_map_area({
         min_x => $self->x + $args->{ min_x },
         max_x => $self->x + $args->{ max_x },
