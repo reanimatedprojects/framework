@@ -1,18 +1,20 @@
-Just the map
 [%- map_data = character.location.fetch_map_area( radius = 2 ) -%]
-
-<table border="1" cellspacing="0" cellpadding="5">
+<table id="map_table" border="1" cellspacing="0" cellpadding="5">
 [% FOREACH row IN [0,1,2,3,4];
     " <tr>\n";
     FOREACH col IN [0,1,2,3,4];
-        "  <td>";
         md = map_data.$col.$row;
         IF md;
+            css_classes = [];
+            css_classes.push( md.tile.css_class ) IF md.tile.css_class;
+            css_classes.push( md.css_class ) IF md.css_class;
+            css_class = css_classes.join(" ");
+            "  <td class=\"${css_class}\">";
             md.name _ " at " _ md.x _ "," _ md.y;
+            "</td>\n";
         ELSE;
-            "empty";
+            "<td>empty</td>\n";
         END;
-        "</td>\n";
     END;
     " </tr>\n";
 END %]

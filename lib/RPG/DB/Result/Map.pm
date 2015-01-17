@@ -88,13 +88,18 @@ __PACKAGE__->add_columns(
         size                => 32,
         is_nullable         => 0,
     },
+    css_class => {
+        data_type           => "char",
+        size                => 32,
+        is_nullable         => 1,
+    },
 );
 __PACKAGE__->set_primary_key('map_id');
 __PACKAGE__->might_have(
     description => 'RPG::DB::Result::MapDescription',
     'map_id'
 );
-__PACKAGE__->has_one(
+__PACKAGE__->belongs_to(
     tile => 'RPG::DB::Result::Tile',
     'tile_id'
 );

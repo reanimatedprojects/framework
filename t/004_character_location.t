@@ -28,12 +28,13 @@ unless ($tile) {
 }
 
 my $map = schema->resultset('Map')->find({
-    x => 0, y => 0, z => 0, world => 0
+    x => 0, y => 0, z => 0, world => 1
 });
 unless ($map) {
     print "No map, creating\n";
     $map = schema->resultset('Map')->create({
-        x => 0, y => 0, z => 0, world => 0
+        x => 0, y => 0, z => 0, world => 1,
+        tile_id => $tile->tile_id, name => $tile->name,
     });
 }
 
@@ -51,6 +52,7 @@ if (scalar(@characters) == 0) {
     });
 } else {
     $character = shift @characters;
+    $character->update({ x => $map->x, y => $map->y, z => $map->z, world => $map->world });
 }
 ok($character->character_id(), "character fetched");
 
@@ -63,38 +65,7 @@ ok($location->world == $character->world, " map/character world match");
 
 isa_ok($location, "RPG::DB::Result::Map");
 
-## Need to convert the following into useful tests to ensure that
-## fetching the map area give the correct values including sizes
-## of arrays returned and actual content.
+print "location->tile_id : ", $location->tile_id, "\n";
 
-my $map_size = { min_x => 0, max_x => 1, min_y => -1, max_y => 1, };
-my $results = $location->fetch_map_area( radius => 1 );
-
-print "min_x: $map_size->{ min_x }\n";
-print "max_x: $map_size->{ max_x }\n";
-
-print "min_y: $map_size->{ min_y }\n";
-print "max_y: $map_size->{ max_y }\n";
-
-for (my $col = 0; $col <= ($map_size->{ max_x } - $map_size->{ min_x }); $col++) {
-    if (! defined $results->[$col]) {
-        # If [$col] is undefined then the whole column is undefined
-        print "col: $col is undefined.\n";
-        next;
-    }
-    print "\ncol: $col has ", scalar(@{$results->[$col]}), " rows\n";
-
-    for (my $row = 0; $row <= ($map_size->{ max_y } - $map_size->{ min_y }); $row ++) {
-
-        print "x: ", $col + $map_size->{ min_x }, ", y: ", $row + $map_size->{ min_y }, "\n";
-        my $cell = $results->[$col][$row];
-        if (defined $cell) {
-            print " $col, $row : ", join (",", $cell->id, $cell->x, $cell->y, $cell->z, $cell->world), "\n";
-        } else {
-            print " $col, $row : undef\n";
-        }
-    }
-}
-print "\n";
-# print Dumper($results);
+print "location->tile->tile_id : ", $location->tile->tile_id, "\n";
 

@@ -85,3 +85,8 @@ p {
     padding: 5px;
     /* icon for blue (i) */
 }
+
+#game_map #map_table td {
+    width: 70px;
+    height: 70px;
+}

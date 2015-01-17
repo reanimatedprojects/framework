@@ -20,7 +20,7 @@ if ($account1) {
     print "Found account with email=$email\n";
     print "Deleting account ", $account1->account_id, "\n";
     $account1->delete;
-    # If it fails to delete (e.g has characters) things go wrong
+    # If it fails to delete (e.g has characters) things go wrong
 }
 
 my $account2 = $schema->resultset('Account')->create({
@@ -35,7 +35,7 @@ ok($account2->account_id, "account object created");
 ok($account2->email eq $email, "  and email matches the one used");
 
 my $account3 = $schema->resultset('Account')->find( $account2->account_id );
-ok($account3, "account object fetched");
+ok($account3, "account object fetched by id");
 ok($account3->email eq $email, "  and email matches the original");
 
 # Final cleanup of the two newly created accounts

@@ -71,6 +71,11 @@ __PACKAGE__->add_columns(
         data_type           => "char",
         size                => 7,
     },
+    css_class => {
+        data_type           => "char",
+        size                => 32,
+        is_nullable         => 1,
+    },
 );
 __PACKAGE__->set_primary_key('tile_id');
 
